@@ -10,6 +10,7 @@
 
 Servo leftServo;
 Servo rightServo;
+Servo extinguisher;
 
 Ultrasonic frontUltrasonic(FRONT_US_ECHO, FRONT_US_TRIG, true);
 
@@ -43,7 +44,7 @@ void setup() {
   leftServo.attach(LEFT_SERVO_PIN);
   rightServo.attach(RIGHT_SERVO_PIN);
 
-  // pinMode(5, OUTPUT);
+  pinMode(6, INPUT);
 }
 
 void loop() {
@@ -54,6 +55,24 @@ void loop() {
     moveForward();
   } else {
     moveBackward();
+  }
+
+  if (digitalRead(6)) {
+    moveForward();
+
+    if (frontUltrasonic.getDistance() > 3) {
+      moveForward();
+    } else {
+      stopRobot();
+      delay(500);
+      
+      extinguisher.write(180);
+      delay(500);
+      
+      if (!digitalRead(6)) {
+        extinguisher.write(90);
+      }
+    }
   }
   
   delay(100);
