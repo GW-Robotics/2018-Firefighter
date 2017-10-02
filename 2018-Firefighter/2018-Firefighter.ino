@@ -4,6 +4,8 @@
 
 #define LEFT_SERVO_PIN  4
 #define RIGHT_SERVO_PIN 5
+#define IR_PIN 6
+#define EXTINGUISHER_PIN 7
 
 #define FRONT_US_ECHO   2
 #define FRONT_US_TRIG   3
@@ -39,41 +41,55 @@ void stopRobot() {
   rightServo.write(90);
 }
 
-void setup() {
-  // put your setup code here, to run once:
-  leftServo.attach(LEFT_SERVO_PIN);
-  rightServo.attach(RIGHT_SERVO_PIN);
-
-  pinMode(6, INPUT);
+boolean detectFire(){
+  return digitalRead(IR_PIN);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  // int value = digitalRead(5);
-  
-  if (frontUltrasonic.getDistance() > 3) {
-    moveForward();
-  } else {
-    moveBackward();
-  }
+void startExtinguisher(){
+  extinguisher.write(180);
+}
 
-  if (digitalRead(6)) {
-    moveForward();
+void stopExtinguisher(){
+  extinguisher.write(90);
+}
 
+void extinguishFire(){
+  if (detectFire()) {
     if (frontUltrasonic.getDistance() > 3) {
       moveForward();
     } else {
       stopRobot();
       delay(500);
       
-      extinguisher.write(180);
+      startExtinguisher();
       delay(500);
       
-      if (!digitalRead(6)) {
-        extinguisher.write(90);
+      if (!detectFire()) {
+        stopExtinguisher();
       }
     }
   }
+}
+
+void setup() {
+  // put your setup code here, to run once:
+  leftServo.attach(LEFT_SERVO_PIN);
+  rightServo.attach(RIGHT_SERVO_PIN);
+  extinguisher.attach(EXTINGUISHER_PIN);
+
+  pinMode(IR_PIN, INPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  
+  if (frontUltrasonic.getDistance() > 3) {
+    moveForward();
+  } else {
+    moveBackward();
+  }
+  
+  extinguishFire();
   
   delay(100);
 }
