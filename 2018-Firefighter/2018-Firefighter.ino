@@ -126,7 +126,7 @@ void loop() {
   } else {
     digitalWrite(BABY_LED, LOW);
   }
-  if(detetSound){
+  if(detectSound){
     digitalWrite(MIC_LED, HIGH);
   } else {
     digitalWrite(MIC_LED, LOW);
