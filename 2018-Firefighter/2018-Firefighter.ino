@@ -116,16 +116,19 @@ void loop() {
   } else {
     digitWrite(FLAME_LED, LOW);
   }
+  
   if (usingCamera()){
     digitalWrite(CAMERA_LED, HIGH);
   } else {
     digitalWrite(CAMERA_LED, LOW);
   }
+  
   if(detectBaby()){
     digitalWrite(BABY_LED, HIGH);
   } else {
     digitalWrite(BABY_LED, LOW);
   }
+  
   if(detectSound()){
     digitalWrite(MIC_LED, HIGH);
   } else {
