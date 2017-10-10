@@ -71,6 +71,28 @@ void extinguishFire(){
   }
 }
 
+void mazeNav(){
+    //MOVE THE ROBOT
+  int a; //dummy variable to mess with the robot's direction
+  if (frontUltrasonic.getDistance() < 2 && a>=4){ //if going right four times doesn't fix it, then go left.
+    moveBackward();
+    delay(1000);
+    moveLeft();
+    int a = 1;
+  }
+
+  else if (frontUltrasonic.getDistance() < 2){
+    moveBackward();
+    delay(1000);
+    moveRight();
+    int a = a+1;
+  }
+
+  else{
+    moveForward();
+  }
+}
+
 void setup() {
   // put your setup code here, to run once:
   leftServo.attach(LEFT_SERVO_PIN);
@@ -83,12 +105,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   
-  if (frontUltrasonic.getDistance() > 3) {
-    moveForward();
-  } else {
-    moveBackward();
-  }
-  
+  mazeNav();
   extinguishFire();
   
   delay(100);
