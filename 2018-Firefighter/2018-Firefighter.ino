@@ -85,6 +85,7 @@ void mazeNav(){
     moveBackward();
     delay(1000);
     moveRight();
+    delay(1000);
     int a = a+1;
   }
 
