@@ -6,6 +6,12 @@
 #define RIGHT_SERVO_PIN 5
 #define IR_PIN 6
 #define EXTINGUISHER_PIN 7
+#define MIC_PIN 43 
+#define FLAME_LED 9
+#define MIC_LED 11
+#define BABY_LED 17
+#define CAMERA 15
+#define CAMERA_LED 16
 
 #define FRONT_US_ECHO   2
 #define FRONT_US_TRIG   3
@@ -69,7 +75,11 @@ void extinguishFire(){
       }
     }
   }
+  int detectSound(){return 0;}
+  int detectBaby(){return 0;}
+  int usingCamera(){return 0;)
 }
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -78,6 +88,14 @@ void setup() {
   extinguisher.attach(EXTINGUISHER_PIN);
 
   pinMode(IR_PIN, INPUT);
+  pinMode(FLAME_LED, OUTPUT);
+  
+  pinMode(MIC_PIN, INPUT);
+  pinMode(MIC_LED, OUTPUT);
+  
+  pinMode(BABY_LED, OUTPT);
+  
+  pinMode(CAMERA_LED, OUTPUT);
 }
 
 void loop() {
@@ -92,4 +110,30 @@ void loop() {
   extinguishFire();
   
   delay(100);
+
+  if (detectfire()){
+    digitalWrite(FLAME_LED, HIGH);
+  } else {
+    digitWrite(FLAME_LED, LOW);
+  }
+  
+  if (usingCamera()){
+    digitalWrite(CAMERA_LED, HIGH);
+  } else {
+    digitalWrite(CAMERA_LED, LOW);
+  }
+  
+  if(detectBaby()){
+    digitalWrite(BABY_LED, HIGH);
+  } else {
+    digitalWrite(BABY_LED, LOW);
+  }
+  
+  if(detectSound()){
+    digitalWrite(MIC_LED, HIGH);
+  } else {
+    digitalWrite(MIC_LED, LOW);
+  }
+ } 
 }
+  
