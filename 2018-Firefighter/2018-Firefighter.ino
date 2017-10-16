@@ -54,7 +54,7 @@ void stopExtinguisher(){
 }
 
 void extinguishFire(){
-  if (detectFire()) {
+  while (detectFire()) {
     if (frontUltrasonic.getDistance() > 3) {
       moveForward();
     } else {
@@ -68,6 +68,7 @@ void extinguishFire(){
         stopExtinguisher();
       }
     }
+    delay(100);
   }
 }
 
@@ -76,6 +77,8 @@ void setup() {
   leftServo.attach(LEFT_SERVO_PIN);
   rightServo.attach(RIGHT_SERVO_PIN);
   extinguisher.attach(EXTINGUISHER_PIN);
+  stopRobot();
+  extinguisher.write(90);
 
   pinMode(IR_PIN, INPUT);
 }
@@ -83,11 +86,11 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   
-  if (frontUltrasonic.getDistance() > 3) {
-    moveForward();
-  } else {
-    moveBackward();
-  }
+//  if (frontUltrasonic.getDistance() > 3) {
+//    moveForward();
+//  } else {
+//    moveBackward();
+//  }
   
   extinguishFire();
   
