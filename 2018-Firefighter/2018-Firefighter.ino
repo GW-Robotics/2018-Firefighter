@@ -9,12 +9,15 @@
 
 #define FRONT_US_ECHO   2
 #define FRONT_US_TRIG   3
+#define LEFT_US_ECHO   18
+#define LEFT_US_TRIG   19
 
 Servo leftServo;
 Servo rightServo;
 Servo extinguisher;
 
 Ultrasonic frontUltrasonic(FRONT_US_ECHO, FRONT_US_TRIG, true);
+Ultrasonic leftUltrasonic(LEFT_US_ECHO, LEFT_US_TRIG, true);
 
 void moveForward() {
   leftServo.write(180);
@@ -84,13 +87,7 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  
-//  if (frontUltrasonic.getDistance() > 3) {
-//    moveForward();
-//  } else {
-//    moveBackward();
-//  }
+// put your main code here, to run repeatedly:
   
   extinguishFire();
   
