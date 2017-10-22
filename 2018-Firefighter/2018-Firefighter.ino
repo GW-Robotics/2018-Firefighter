@@ -15,12 +15,15 @@
 
 #define FRONT_US_ECHO   2
 #define FRONT_US_TRIG   3
+#define LEFT_US_ECHO   18
+#define LEFT_US_TRIG   19
 
 Servo leftServo;
 Servo rightServo;
 Servo extinguisher;
 
 Ultrasonic frontUltrasonic(FRONT_US_ECHO, FRONT_US_TRIG, true);
+Ultrasonic leftUltrasonic(LEFT_US_ECHO, LEFT_US_TRIG, true);
 
 void moveForward() {
   leftServo.write(180);
@@ -60,7 +63,7 @@ void stopExtinguisher(){
 }
 
 void extinguishFire(){
-  if (detectFire()) {
+  while (detectFire()) {
     if (frontUltrasonic.getDistance() > 3) {
       moveForward();
     } else {
@@ -74,6 +77,7 @@ void extinguishFire(){
         stopExtinguisher();
       }
     }
+    delay(100);
   }
   int detectSound(){return 0;}
   int detectBaby(){return 0;}
@@ -86,6 +90,8 @@ void setup() {
   leftServo.attach(LEFT_SERVO_PIN);
   rightServo.attach(RIGHT_SERVO_PIN);
   extinguisher.attach(EXTINGUISHER_PIN);
+  stopRobot();
+  extinguisher.write(90);
 
   pinMode(IR_PIN, INPUT);
   pinMode(FLAME_LED, OUTPUT);
@@ -99,13 +105,7 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  
-  if (frontUltrasonic.getDistance() > 3) {
-    moveForward();
-  } else {
-    moveBackward();
-  }
+// put your main code here, to run repeatedly:
   
   extinguishFire();
   
