@@ -62,6 +62,10 @@ void stopExtinguisher(){
   extinguisher.write(90);
 }
 
+int detectSound(){return 0;}
+int detectBaby(){return 0;}
+int usingCamera(){return 0;}
+
 void extinguishFire(){
   while (detectFire()) {
     if (frontUltrasonic.getDistance() > 3) {
@@ -79,9 +83,6 @@ void extinguishFire(){
     }
     delay(100);
   }
-  int detectSound(){return 0;} //these three lines are giving compiler errors
-  int detectBaby(){return 0;}
-  int usingCamera(){return 0;)
 }
 
 void mazeNav() { //MOVE MY MINION
@@ -125,10 +126,10 @@ void loop() {
   extinguishFire();
   delay(100);
 
-  if (detectfire()){
+  if (detectFire()){
     digitalWrite(FLAME_LED, HIGH);
   } else {
-    digitWrite(FLAME_LED, LOW);
+    digitalWrite(FLAME_LED, LOW);
   }
   
   if (usingCamera()){
@@ -148,6 +149,4 @@ void loop() {
   } else {
     digitalWrite(MIC_LED, LOW);
   }
- } 
 }
-  
