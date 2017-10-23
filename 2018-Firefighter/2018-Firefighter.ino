@@ -68,7 +68,7 @@ boolean detectFire(){
   return digitalRead(IR_PIN);
 }
 
-void avoidDog() {
+boolean avoidDog() {
   
 }
 
