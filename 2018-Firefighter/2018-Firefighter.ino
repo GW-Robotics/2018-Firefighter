@@ -79,11 +79,25 @@ void extinguishFire(){
     }
     delay(100);
   }
-  int detectSound(){return 0;}
+  int detectSound(){return 0;} //these three lines are giving compiler errors
   int detectBaby(){return 0;}
   int usingCamera(){return 0;)
 }
 
+void mazeNav() { //MOVE MY MINION
+  if(frontUltrasonic < 2 && leftUltrasonic < 2){ //robot has wall in front and to left
+    moveRight();
+    delay(500);
+  }
+  else if(frontUltrasonic < 2 && leftUltrasonic >= 2){ //robot has wall in front
+    moveLeft();
+    delay(500);
+  }
+  else{ //if(frontUltrasonic >=2 && leftUltrasonic <2), or if (frontUltrasonic >= 2 && leftUltrasonic >= 2): hug the left wall
+    moveForward();
+    delay(500);
+  }
+}
 
 void setup() {
   // put your setup code here, to run once:
@@ -99,7 +113,7 @@ void setup() {
   pinMode(MIC_PIN, INPUT);
   pinMode(MIC_LED, OUTPUT);
   
-  pinMode(BABY_LED, OUTPT);
+  pinMode(BABY_LED, OUTPUT);
   
   pinMode(CAMERA_LED, OUTPUT);
 }
@@ -107,8 +121,8 @@ void setup() {
 void loop() {
 // put your main code here, to run repeatedly:
   
+  mazeNav();
   extinguishFire();
-  
   delay(100);
 
   if (detectfire()){
