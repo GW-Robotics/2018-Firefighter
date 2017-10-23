@@ -17,8 +17,6 @@
 #define FRONT_US_TRIG   3
 #define LEFT_US_ECHO   18
 #define LEFT_US_TRIG   19
-#define RIGHT_US_ECHO  20
-#define RIGHT_US_TRIG 21
 
 Servo leftServo;
 Servo rightServo;
@@ -26,7 +24,6 @@ Servo extinguisher;
 
 Ultrasonic frontUltrasonic(FRONT_US_ECHO, FRONT_US_TRIG, true);
 Ultrasonic leftUltrasonic(LEFT_US_ECHO, LEFT_US_TRIG, true);
-Ultrasonic rightUltrasonic(RIGHT_US_ECHO, RIGH_US_TRIG, true);
 
 void moveForward() {
   leftServo.write(180);
@@ -71,12 +68,6 @@ int usingCamera(){return 0;}
 
 void extinguishFire(){
   while (detectFire()) {
-     if (detectFire()){
-      digitalWrite(FLAME_LED, HIGH);
-     } else {
-     digitalWrite(FLAME_LED, LOW);
-     }
-    
     if (frontUltrasonic.getDistance() > 3) {
       moveForward();
     } else {
@@ -134,7 +125,17 @@ void loop() {
   mazeNav();
   extinguishFire();
   delay(100);
-  
+
+  if (detectFire()){
+    digitalWrite(FLAME_LED, HIGH);
+  } else {
+    digitalWrite(FLAME_LED, LOW);
+  }
+  if(avoidDog()){
+  moveBackward();
+  } else {
+    moveForward();
+  }
   if (usingCamera()){
     digitalWrite(CAMERA_LED, HIGH);
   } else {
