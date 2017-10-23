@@ -62,6 +62,10 @@ void stopExtinguisher(){
   extinguisher.write(90);
 }
 
+int detectSound(){return 0;}
+int detectBaby(){return 0;}
+int usingCamera(){return 0;}
+
 void extinguishFire(){
   while (detectFire()) {
     if (frontUltrasonic.getDistance() > 3) {
@@ -79,9 +83,6 @@ void extinguishFire(){
     }
     delay(100);
   }
-  int detectSound(){return 0;}
-  int detectBaby(){return 0;}
-  int usingCamera(){return 0;)
 }
 
 
@@ -99,7 +100,7 @@ void setup() {
   pinMode(MIC_PIN, INPUT);
   pinMode(MIC_LED, OUTPUT);
   
-  pinMode(BABY_LED, OUTPT);
+  pinMode(BABY_LED, OUTPUT);
   
   pinMode(CAMERA_LED, OUTPUT);
 }
@@ -111,10 +112,10 @@ void loop() {
   
   delay(100);
 
-  if (detectfire()){
+  if (detectFire()){
     digitalWrite(FLAME_LED, HIGH);
   } else {
-    digitWrite(FLAME_LED, LOW);
+    digitalWrite(FLAME_LED, LOW);
   }
   
   if (usingCamera()){
@@ -134,6 +135,4 @@ void loop() {
   } else {
     digitalWrite(MIC_LED, LOW);
   }
- } 
 }
-  
