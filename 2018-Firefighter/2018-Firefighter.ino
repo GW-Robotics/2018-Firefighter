@@ -68,6 +68,10 @@ boolean detectFire(){
   return digitalRead(IR_PIN);
 }
 
+void avoidDog() {
+  
+}
+
 void startExtinguisher(){
   extinguisher.write(180);
 }
@@ -182,6 +186,12 @@ void loop() {
     digitalWrite(BABY_LED, HIGH);
   } else {
     digitalWrite(BABY_LED, LOW);
+  }
+  
+  if(avoidDog()){
+  moveBackward();
+  } else {
+    moveForward();
   }
 
   if (robotOn) {
