@@ -32,7 +32,7 @@ Servo extinguisher;
 
 Ultrasonic frontUltrasonic(FRONT_US_ECHO, FRONT_US_TRIG, true);
 Ultrasonic leftUltrasonic(LEFT_US_ECHO, LEFT_US_TRIG, true);
-Ultrasonic rightUltrasonic(RIGHT_US_ECHO, RIGH_US_TRIG, true);
+Ultrasonic rightUltrasonic(RIGHT_US_ECHO, RIGHT_US_TRIG, true);
 
 bool checkingMicrophone = true;
 bool hearingStartSound = false;
@@ -126,15 +126,15 @@ void checkMicrophone() {
 }
 
 void mazeNav() { //MOVE MY MINION
-  if(frontUltrasonic < 2 && leftUltrasonic < 2){ //robot has wall in front and to left
+  if(frontUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() < 2){ //robot has wall in front and to left
     moveRight();
     delay(500);
   }
-  else if(frontUltrasonic < 2 && leftUltrasonic >= 2){ //robot has wall in front
+  else if(frontUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() >= 2){ //robot has wall in front
     moveLeft();
     delay(500);
   }
-  else{ //if(frontUltrasonic >=2 && leftUltrasonic <2), or if (frontUltrasonic >= 2 && leftUltrasonic >= 2): hug the left wall
+  else{ //if(frontUltrasonic.getDistance() >=2 && leftUltrasonic.getDistance() <2), or if (frontUltrasonic.getDistance() >= 2 && leftUltrasonic.getDistance() >= 2): hug the left wall
     moveForward();
     delay(500);
   }
