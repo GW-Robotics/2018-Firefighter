@@ -3,6 +3,7 @@
 
 # Libraries
 - [arduino-gwrobolib](https://github.com/GW-Robotics/arduino-gwrobolib)
+- FreqCount
 
 # Directories
 - `CAD`: Solidworks files for the robot

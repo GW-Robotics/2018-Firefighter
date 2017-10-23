@@ -116,6 +116,21 @@ void checkMicrophone() {
   }
 }
 
+void mazeNav() { //MOVE MY MINION
+  if(frontUltrasonic < 2 && leftUltrasonic < 2){ //robot has wall in front and to left
+    moveRight();
+    delay(500);
+  }
+  else if(frontUltrasonic < 2 && leftUltrasonic >= 2){ //robot has wall in front
+    moveLeft();
+    delay(500);
+  }
+  else{ //if(frontUltrasonic >=2 && leftUltrasonic <2), or if (frontUltrasonic >= 2 && leftUltrasonic >= 2): hug the left wall
+    moveForward();
+    delay(500);
+  }
+}
+
 void setup() {
   // put your setup code here, to run once:
   leftServo.attach(LEFT_SERVO_PIN);
@@ -145,6 +160,8 @@ void loop() {
   }
 
   if (robotOn) {
+    mazeNav();
+    
     extinguishFire();
     
     delay(100);
