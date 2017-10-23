@@ -78,23 +78,14 @@ void extinguishFire(){
 void mazeNav(){
     //MOVE THE ROBOT
   int a; //dummy variable to mess with the robot's direction
-  if (frontUltrasonic.getDistance() < 2 && a>=4){ //if going right four times doesn't fix it, then go left.
+  if (frontUltrasonic.getDistance(){ 
     moveBackward();
-    delay(1000);
-    moveLeft();
-    int a = 1;
-  }
-
-  else if (frontUltrasonic.getDistance() < 2){
-    moveBackward();
-    delay(1000);
-    moveRight();
-    delay(1000);
-    int a = a+1;
+    delay(500);
   }
 
   else{
     moveForward();
+    delay(500);
   }
 }
 
