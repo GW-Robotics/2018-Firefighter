@@ -99,7 +99,7 @@ void setup() {
   pinMode(MIC_PIN, INPUT);
   pinMode(MIC_LED, OUTPUT);
   
-  pinMode(BABY_LED, OUTPT);
+  pinMode(BABY_LED, OUTPUT);
   
   pinMode(CAMERA_LED, OUTPUT);
 }
@@ -114,7 +114,7 @@ void loop() {
   if (detectfire()){
     digitalWrite(FLAME_LED, HIGH);
   } else {
-    digitWrite(FLAME_LED, LOW);
+    digitalWrite(FLAME_LED, LOW);
   }
   
   if (usingCamera()){
