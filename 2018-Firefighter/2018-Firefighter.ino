@@ -8,7 +8,6 @@
 #define RIGHT_SERVO_PIN 5
 #define IR_PIN 6
 #define EXTINGUISHER_PIN 7
-#define MIC_PIN 43 
 #define FLAME_LED 9
 #define MIC_LED 11
 #define BABY_LED 17
@@ -155,7 +154,6 @@ void setup() {
   pinMode(IR_PIN, INPUT);
   pinMode(FLAME_LED, OUTPUT);
   
-  pinMode(MIC_PIN, INPUT);
   pinMode(MIC_LED, OUTPUT);
   
   pinMode(BABY_LED, OUTPUT);
