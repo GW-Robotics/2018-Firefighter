@@ -22,8 +22,8 @@
 #define RIGHT_US_TRIG 21
 
 // Bounds for start sound frequency:
-#define LOW_START 3230
-#define HIGH_START 4370
+#define LOW_START 3306
+#define HIGH_START 4294
 
 Servo leftServo;
 Servo rightServo;
@@ -65,10 +65,6 @@ void stopRobot() {
 
 boolean detectFire(){
   return digitalRead(IR_PIN);
-}
-
-boolean avoidDog() {
-  
 }
 
 void startExtinguisher(){
@@ -186,11 +182,6 @@ void loop() {
     digitalWrite(BABY_LED, LOW);
   }
   
-  if(avoidDog()){
-  moveBackward();
-  } else {
-    moveForward();
-  }
 
   if (robotOn) {
     mazeNav();
