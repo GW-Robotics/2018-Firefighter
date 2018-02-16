@@ -146,15 +146,21 @@ void mazeNav() { //MOVE MY MINION
   }
 }
 
-
+float calcAvg(float x,float y){
+  float avg=(x+y)/2;
+  return avg;
+}
 
 void startUp(){
-  float right=rightUltrasonic.getDistance();
-  float left=leftUltrasonic.getDistance();
-  float front=frontLeftUltrasonic.getDistance();
-  float back=backUltrasonic.getDistance();
+  float rawRight=rightUltrasonic.getDistance();
+  float rawLeft=leftUltrasonic.getDistance();
+  float rawFront=frontLeftUltrasonic.getDistance();
+  float rawBack=backUltrasonic.getDistance();
 
-  
+  float right=calcAvg(rawRight,rawRight);
+  float left=calcAvg(rawLeft,rawLeft);
+  float front=calcAvg(rawFront,rawFront);
+  float back=calcAvg(rawBack,rawBack);
   
   if(right < 2 && back < 2){
     turn(90);
