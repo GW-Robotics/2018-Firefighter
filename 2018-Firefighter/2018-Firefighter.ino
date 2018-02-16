@@ -14,12 +14,17 @@
 #define CAMERA 15
 #define CAMERA_LED 16
 
-#define FRONT_US_ECHO   2
-#define FRONT_US_TRIG   3
-#define LEFT_US_ECHO   18
-#define LEFT_US_TRIG   19
-#define RIGHT_US_ECHO  20
-#define RIGHT_US_TRIG 21
+//Ultrasonic Trigger and Echo pins (30-39)
+#define F_L_ECHO  30  //Front-left Ultrasonic
+#define F_L_TRIG  31
+#define F_R_ECHO  32  //Front-right Ultrasonic
+#define F_R_TRIG  33
+#define R_ECHO  34  //Right Ultrasonic
+#define R_TRIG  35
+#define B_ECHO  36  //Back Ultrasonic
+#define B_TRIG  37
+#define L_ECHO  38  //Left Ultrasonic
+#define L_TRIG  39
 
 // Bounds for start sound frequency:
 #define LOW_START 3306
@@ -29,9 +34,11 @@ Servo leftServo;
 Servo rightServo;
 Servo extinguisher;
 
-Ultrasonic frontUltrasonic(FRONT_US_ECHO, FRONT_US_TRIG, true);
-Ultrasonic leftUltrasonic(LEFT_US_ECHO, LEFT_US_TRIG, true);
-Ultrasonic rightUltrasonic(RIGHT_US_ECHO, RIGHT_US_TRIG, true);
+Ultrasonic frontLeftUltrasonic(F_L_ECHO, F_L_TRIG, true);
+Ultrasonic frontRightUltrasonic(F_R_ECHO, F_R_TRIG, true);
+Ultrasonic leftUltrasonic(L_ECHO, L_TRIG, true);
+Ultrasonic rightUltrasonic(R_ECHO, R_TRIG, true);
+Ultrasonic backUltrasonic(B_ECHO, B_TRIG, true);
 
 bool checkingMicrophone = true;
 bool hearingStartSound = false;
@@ -86,7 +93,7 @@ void extinguishFire(){
      digitalWrite(FLAME_LED, LOW);
      }
     
-    if (frontUltrasonic.getDistance() > 3) {
+    if (frontLeftUltrasonic.getDistance() > 3) {
       moveForward();
     } else {
       stopRobot();
@@ -125,15 +132,15 @@ void checkMicrophone() {
 }
 
 void mazeNav() { //MOVE MY MINION
-  if(frontUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() < 2){ //robot has wall in front and to left
+  if(frontLeftUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() < 2){ //robot has wall in front and to left
     moveRight();
     delay(500);
   }
-  else if(frontUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() >= 2){ //robot has wall in front
+  else if(frontLeftUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() >= 2){ //robot has wall in front
     moveLeft();
     delay(500);
   }
-  else{ //if(frontUltrasonic.getDistance() >=2 && leftUltrasonic.getDistance() <2), or if (frontUltrasonic.getDistance() >= 2 && leftUltrasonic.getDistance() >= 2): hug the left wall
+  else{ //if(frontLeftUltrasonic.getDistance() >=2 && leftUltrasonic.getDistance() <2), or if (frontLeftUltrasonic.getDistance() >= 2 && leftUltrasonic.getDistance() >= 2): hug the left wall
     moveForward();
     delay(500);
   }
