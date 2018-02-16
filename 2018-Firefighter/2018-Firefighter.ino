@@ -146,6 +146,18 @@ void mazeNav() { //MOVE MY MINION
   }
 }
 
+void startUp(){
+  if(rightUltrasonic.getDistance() < 2 && backUltrasonic.getDistance() < 2){
+    turn(90);
+  }
+  else if(rightUltrasonic.getDistance() < 2 && frontLeftUltrasonic.getDistance() < 2){
+    turn(180);
+  }
+  else if(frontLeftUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() < 2){
+    turn(-90);
+  }
+}
+
 void setup() {
   // put your setup code here, to run once:
   leftServo.attach(LEFT_SERVO_PIN);
@@ -173,7 +185,7 @@ void loop() {
     checkMicrophone();
   }
   
-  mazeNav();
+  startUp();
   extinguishFire();
   delay(100);
   
