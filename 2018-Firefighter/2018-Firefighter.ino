@@ -172,7 +172,11 @@ void startUp(){
     turn(-90);
   }
   else{
-    continue;
+    int a=1;
+  }
+
+  while(rawRight>2){
+    moveForward();
   }
 }
 
