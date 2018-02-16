@@ -146,15 +146,27 @@ void mazeNav() { //MOVE MY MINION
   }
 }
 
+
+
 void startUp(){
-  if(rightUltrasonic.getDistance() < 2 && backUltrasonic.getDistance() < 2){
+  float right=rightUltrasonic.getDistance();
+  float left=leftUltrasonic.getDistance();
+  float front=frontLeftUltrasonic.getDistance();
+  float back=backUltrasonic.getDistance();
+
+  
+  
+  if(right < 2 && back < 2){
     turn(90);
   }
-  else if(rightUltrasonic.getDistance() < 2 && frontLeftUltrasonic.getDistance() < 2){
+  else if(right < 2 && front < 2){
     turn(180);
   }
-  else if(frontLeftUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() < 2){
+  else if(front < 2 && left < 2){
     turn(-90);
+  }
+  else{
+    continue;
   }
 }
 
