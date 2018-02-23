@@ -44,7 +44,7 @@ bool checkingMicrophone = true;
 bool hearingStartSound = false;
 bool robotOn = false;
 unsigned long freqCount;
-double closeToWall = 2;
+double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
 void moveForward() {
   leftServo.write(180);
