@@ -181,25 +181,26 @@ float calcAvg(float x,float y){
 
 
 void startUp(){
+  //ping ultrasonics twice and average the values to get (hopefully) accurate values
   float right=calcAvg(rightUltrasonic.getDistance(),rightUltrasonic.getDistance());
   float left=calcAvg(leftUltrasonic.getDistance(),leftUltrasonic.getDistance());
   float front=calcAvg(frontLeftUltrasonic.getDistance(),frontRightUltrasonic.getDistance());
   float back=calcAvg(backUltrasonic.getDistance(),backUltrasonic.getDistance());
   
-  if(right < closeToWall && back < closeToWall){
+  if(right < closeToWall && back < closeToWall){  //robot is facing downward
     turn(90);
   }
-  else if(right < closeToWall && front < closeToWall){
+  else if(right < closeToWall && front < closeToWall){  //robot is facing backward
     turn(180);
   }
-  else if(front < closeToWall && left < closeToWall){
+  else if(front < closeToWall && left < closeToWall){ //robot is facing upward
     turn(-90);
   }
-  else{
-    int a=1;
+  else{   //robot is facing the correct direction
+    turn(0);
   }
 
-  while(rightUltrasonic.getDistance() > closeToWall){
+  while(rightUltrasonic.getDistance() > closeToWall){   //roll forward until the first room is encountered, then kick out of function
     moveForward();
   }
 }
