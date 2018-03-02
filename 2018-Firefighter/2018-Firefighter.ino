@@ -42,8 +42,8 @@ Ultrasonic rightUltrasonic(R_ECHO, R_TRIG, true);
 Ultrasonic backUltrasonic(B_ECHO, B_TRIG, true);
 
 //Gyroscope controls
-int gyroStartAngle;
-int gyroTargetAngle = 0;
+float gyroStartAngle;
+float gyroTargetAngle = 0;
 
 bool checkingMicrophone = true;
 bool hearingStartSound = false;
@@ -96,7 +96,7 @@ void resetGyro(){
 }
 
 //Returns the current angle of the robot relative to its starting angle
-void getGyroAngle(){
+float getGyroAngle(){
   return digitalRead(GYRO_PIN)-gyroStartAngle;
 }
 
