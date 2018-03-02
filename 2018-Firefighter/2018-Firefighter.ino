@@ -51,12 +51,12 @@ bool robotOn = false;
 unsigned long freqCount;
 double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
-void moveForward() {
+void rollForward() {
   leftServo.write(180);
   rightServo.write(0);
 }
 
-void moveBackward() {
+void rollBackward() {
   leftServo.write(0);
   rightServo.write(180);
 }
@@ -101,13 +101,15 @@ void turn(int angle){
     gyroTargetAngle = 360 + gyroTargetAngle
   }
   if(gyroTargetAngle < getGyroAngle()){
-    moveLeft();
+    leftServo.write(180);
+    rightServo.write(180);
     while(gyroTargetAngle < getGyroAngle()){
       delay(50);
     }
     stopRobot();
   }else if(gyroTargetAngle > getGyroAngle()){
-    moveRight();
+    leftServo.write(0);
+    rightServo.write(0);
     while(gyroTargetAngle > getGyroAngle()){
       delay(50);
     }
@@ -127,7 +129,7 @@ void extinguishFire(){
      }
     
     if (frontLeftUltrasonic.getDistance() > 3) {
-      moveForward();
+      rollForward();
     } else {
       stopRobot();
       delay(500);
@@ -191,7 +193,7 @@ void startUp(){
   }
 
   while(rightUltrasonic.getDistance() > closeToWall){   //roll forward until the first room is encountered, then kick out of function
-    moveForward();
+    rollForward();
   }
 }
 
