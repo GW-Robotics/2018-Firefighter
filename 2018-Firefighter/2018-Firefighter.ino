@@ -174,21 +174,6 @@ void checkMicrophone() {
   }
 }
 
-void mazeNav() { //MOVE MY MINION
-  if(frontLeftUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() < 2){ //robot has wall in front and to left
-    moveRight();
-    delay(500);
-  }
-  else if(frontLeftUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() >= 2){ //robot has wall in front
-    moveLeft();
-    delay(500);
-  }
-  else{ //if(frontLeftUltrasonic.getDistance() >=2 && leftUltrasonic.getDistance() <2), or if (frontLeftUltrasonic.getDistance() >= 2 && leftUltrasonic.getDistance() >= 2): hug the left wall
-    moveForward();
-    delay(500);
-  }
-}
-
 float calcAvg(float x,float y){
   float avg=(x+y)/2;
   return avg;
@@ -266,7 +251,6 @@ void loop() {
   
 
   if (robotOn) {
-    mazeNav();
     
     extinguishFire();
     
