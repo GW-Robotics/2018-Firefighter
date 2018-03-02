@@ -61,16 +61,6 @@ void moveBackward() {
   rightServo.write(180);
 }
 
-void moveLeft() {
-  leftServo.write(180);
-  rightServo.write(180);
-}
-
-void moveRight() {
-  leftServo.write(0);
-  rightServo.write(0);
-}
-
 void stopRobot() {
   leftServo.write(90);
   rightServo.write(90);
