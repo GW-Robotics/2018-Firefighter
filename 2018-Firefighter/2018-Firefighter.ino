@@ -13,6 +13,7 @@
 #define BABY_LED 17
 #define CAMERA 15
 #define CAMERA_LED 16
+#define GYRO_INPUT_PIN 18
 
 //Ultrasonic Trigger and Echo pins (30-39)
 #define F_L_ECHO  30  //Front-left Ultrasonic
@@ -39,6 +40,10 @@ Ultrasonic frontRightUltrasonic(F_R_ECHO, F_R_TRIG, true);
 Ultrasonic leftUltrasonic(L_ECHO, L_TRIG, true);
 Ultrasonic rightUltrasonic(R_ECHO, R_TRIG, true);
 Ultrasonic backUltrasonic(B_ECHO, B_TRIG, true);
+
+//Gyroscope controls
+int gyroStartAngle;
+int gyroTargetAngle = 0;
 
 bool checkingMicrophone = true;
 bool hearingStartSound = false;
@@ -80,6 +85,43 @@ void startExtinguisher(){
 
 void stopExtinguisher(){
   extinguisher.write(90);
+}
+
+//Gyro functions
+//Resets the gyro so that the current positioning is angle "0" 
+void resetGyro(){
+  gyroStartAngle = digitalRead(GYRO_PIN);
+  gyroTargetAngle = 0;
+}
+
+//Returns the current angle of the robot relative to its starting angle
+void getGyroAngle(){
+  return digitalRead(GYRO_PIN)-gyroStartAngle;
+}
+
+//adjusts the target angle based on how much we want to turn and turns the robot until that target is reached
+//use turn(0) to simply get the gyro back on track if it's off target
+void turn(int angle){
+  gyroTargetAngle += angle;
+  if(gyroTargetAngle > 360){
+    gyroTargetAngle = 360 - gyroTargetAngle;
+  }
+  if(gyroTargetAngle < 0){
+    gyroTargetAngle = 360 + gyroTargetAngle
+  }
+  if(gyroTargetAngle < getGyroAngle()){
+    moveLeft();
+    while(gyroTargetAngle < getGyroAngle()){
+      delay(50);
+    }
+    stopRobot();
+  }else if(gyroTargetAngle > getGyroAngle()){
+    moveRight();
+    while(gyroTargetAngle > getGyroAngle()){
+      delay(50);
+    }
+    stopRobot();
+  }
 }
 
 int detectBaby(){return 0;}
@@ -151,6 +193,7 @@ float calcAvg(float x,float y){
   return avg;
 }
 
+
 void startUp(){
   float rawRight=rightUltrasonic.getDistance();
   float rawLeft=leftUltrasonic.getDistance();
@@ -161,6 +204,8 @@ void startUp(){
   float left=calcAvg(rawLeft,rawLeft);
   float front=calcAvg(rawFront,rawFront);
   float back=calcAvg(rawBack,rawBack);
+
+  resetGyro();
   
   if(right < 2 && back < 2){
     turn(90);
@@ -196,6 +241,8 @@ void setup() {
   pinMode(BABY_LED, OUTPUT);
   
   pinMode(CAMERA_LED, OUTPUT);
+
+  pinMode(GYRO, INPUT);
 
   FreqCount.begin(1000); // Begin measuring sound
 }
