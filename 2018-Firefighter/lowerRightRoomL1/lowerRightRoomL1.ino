@@ -8,9 +8,7 @@ void lowerRightRoom(){
   turn(0);
   turn(-25);
 
-  moveForward();  //CHANGE THIS BLOCK WHEN WE HAVE A BETTER MOVE FUNCTION
-  delay(5000);
-  stopRobot();
+  moveForward(diagonalMove);
   
   turn(0);
   turn(-90);
@@ -21,14 +19,12 @@ void lowerRightRoom(){
   turn(-45);
 
   while(frontRightUltrasonic.getDistance() > closeToWall && frontLeftUltrasonic.getDistance() > closeToWall){ //roll forward until the robot gets close to the lower wall
-    moveForward();
+    rollForward();
   }
   stopRobot();
 
   turn(-90);  //turn right towards the exit of the room
-  moveForward();  //AGAIN, CHANGE THIS WHEN WE HAVE A BETTER MOVE FUNCTION
-  delay(3000);
-  stopRobot();
+  moveForward(lateralMove);
   turn(0);
 }
 
