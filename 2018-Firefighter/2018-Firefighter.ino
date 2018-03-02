@@ -49,6 +49,7 @@ bool checkingMicrophone = true;
 bool hearingStartSound = false;
 bool robotOn = false;
 unsigned long freqCount;
+double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
 void moveForward() {
   leftServo.write(180);
@@ -195,32 +196,25 @@ float calcAvg(float x,float y){
 
 
 void startUp(){
-  float rawRight=rightUltrasonic.getDistance();
-  float rawLeft=leftUltrasonic.getDistance();
-  float rawFront=frontLeftUltrasonic.getDistance();
-  float rawBack=backUltrasonic.getDistance();
-
-  float right=calcAvg(rawRight,rawRight);
-  float left=calcAvg(rawLeft,rawLeft);
-  float front=calcAvg(rawFront,rawFront);
-  float back=calcAvg(rawBack,rawBack);
-
-  resetGyro();
+  float right=calcAvg(rightUltrasonic.getDistance(),rightUltrasonic.getDistance());
+  float left=calcAvg(leftUltrasonic.getDistance(),leftUltrasonic.getDistance());
+  float front=calcAvg(frontLeftUltrasonic.getDistance(),frontRightUltrasonic.getDistance());
+  float back=calcAvg(backUltrasonic.getDistance(),backUltrasonic.getDistance());
   
-  if(right < 2 && back < 2){
+  if(right < closeToWall && back < closeToWall){
     turn(90);
   }
-  else if(right < 2 && front < 2){
+  else if(right < closeToWall && front < closeToWall){
     turn(180);
   }
-  else if(front < 2 && left < 2){
+  else if(front < closeToWall && left < closeToWall){
     turn(-90);
   }
   else{
     int a=1;
   }
 
-  while(rawRight>2){
+  while(rightUltrasonic.getDistance() > closeToWall){
     moveForward();
   }
 }
