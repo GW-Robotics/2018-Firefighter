@@ -51,24 +51,14 @@ bool robotOn = false;
 unsigned long freqCount;
 double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
-void moveForward() {
+void rollForward() {
   leftServo.write(180);
   rightServo.write(0);
 }
 
-void moveBackward() {
+void rollBackward() {
   leftServo.write(0);
   rightServo.write(180);
-}
-
-void moveLeft() {
-  leftServo.write(180);
-  rightServo.write(180);
-}
-
-void moveRight() {
-  leftServo.write(0);
-  rightServo.write(0);
 }
 
 void stopRobot() {
@@ -111,13 +101,15 @@ void turn(int angle){
     gyroTargetAngle = 360 + gyroTargetAngle
   }
   if(gyroTargetAngle < getGyroAngle()){
-    moveLeft();
+    leftServo.write(180);
+    rightServo.write(180);
     while(gyroTargetAngle < getGyroAngle()){
       delay(50);
     }
     stopRobot();
   }else if(gyroTargetAngle > getGyroAngle()){
-    moveRight();
+    leftServo.write(0);
+    rightServo.write(0);
     while(gyroTargetAngle > getGyroAngle()){
       delay(50);
     }
@@ -137,7 +129,7 @@ void extinguishFire(){
      }
     
     if (frontLeftUltrasonic.getDistance() > 3) {
-      moveForward();
+      rollForward();
     } else {
       stopRobot();
       delay(500);
@@ -174,21 +166,6 @@ void checkMicrophone() {
   }
 }
 
-void mazeNav() { //MOVE MY MINION
-  if(frontLeftUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() < 2){ //robot has wall in front and to left
-    moveRight();
-    delay(500);
-  }
-  else if(frontLeftUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() >= 2){ //robot has wall in front
-    moveLeft();
-    delay(500);
-  }
-  else{ //if(frontLeftUltrasonic.getDistance() >=2 && leftUltrasonic.getDistance() <2), or if (frontLeftUltrasonic.getDistance() >= 2 && leftUltrasonic.getDistance() >= 2): hug the left wall
-    moveForward();
-    delay(500);
-  }
-}
-
 float calcAvg(float x,float y){
   float avg=(x+y)/2;
   return avg;
@@ -196,26 +173,27 @@ float calcAvg(float x,float y){
 
 
 void startUp(){
+  //ping ultrasonics twice and average the values to get (hopefully) accurate values
   float right=calcAvg(rightUltrasonic.getDistance(),rightUltrasonic.getDistance());
   float left=calcAvg(leftUltrasonic.getDistance(),leftUltrasonic.getDistance());
   float front=calcAvg(frontLeftUltrasonic.getDistance(),frontRightUltrasonic.getDistance());
   float back=calcAvg(backUltrasonic.getDistance(),backUltrasonic.getDistance());
   
-  if(right < closeToWall && back < closeToWall){
+  if(right < closeToWall && back < closeToWall){  //robot is facing downward
     turn(90);
   }
-  else if(right < closeToWall && front < closeToWall){
+  else if(right < closeToWall && front < closeToWall){  //robot is facing backward
     turn(180);
   }
-  else if(front < closeToWall && left < closeToWall){
+  else if(front < closeToWall && left < closeToWall){ //robot is facing upward
     turn(-90);
   }
-  else{
-    int a=1;
+  else{   //robot is facing the correct direction
+    turn(0);
   }
 
-  while(rightUltrasonic.getDistance() > closeToWall){
-    moveForward();
+  while(rightUltrasonic.getDistance() > closeToWall){   //roll forward until the first room is encountered, then kick out of function
+    rollForward();
   }
 }
 
@@ -266,7 +244,6 @@ void loop() {
   
 
   if (robotOn) {
-    mazeNav();
     
     extinguishFire();
     
