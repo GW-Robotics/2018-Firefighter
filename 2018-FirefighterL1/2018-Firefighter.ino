@@ -61,6 +61,16 @@ void rollBackward() {
   rightServo.write(180);
 }
 
+void moveslightleft() {
+  leftServo.write(135);
+  rightServo.write(20); //Half power minus additional 25
+  delay(100);
+}
+
+void moveslightright() {
+  delay(100);
+}
+
 void stopRobot() {
   leftServo.write(90);
   rightServo.write(90);
@@ -79,7 +89,7 @@ void stopExtinguisher(){
 }
 
 //Gyro functions
-//Resets the gyro so that the current positioning is angle "0" 
+//Resets the gyro so that the current positioning is angle "0"
 void resetGyro(){
   gyroStartAngle = digitalRead(GYRO_PIN);
   gyroTargetAngle = 0;
@@ -127,16 +137,16 @@ void extinguishFire(){
      } else {
      digitalWrite(FLAME_LED, LOW);
      }
-    
+
     if (frontLeftUltrasonic.getDistance() > 3) {
       rollForward();
     } else {
       stopRobot();
       delay(500);
-      
+
       startExtinguisher();
       delay(500);
-      
+
       if (!detectFire()) {
         stopExtinguisher();
       }
@@ -178,7 +188,7 @@ void startUp(){
   float left=calcAvg(leftUltrasonic.getDistance(),leftUltrasonic.getDistance());
   float front=calcAvg(frontLeftUltrasonic.getDistance(),frontRightUltrasonic.getDistance());
   float back=calcAvg(backUltrasonic.getDistance(),backUltrasonic.getDistance());
-  
+
   if(right < closeToWall && back < closeToWall){  //robot is facing downward
     turn(90);
   }
@@ -207,11 +217,11 @@ void setup() {
 
   pinMode(IR_PIN, INPUT);
   pinMode(FLAME_LED, OUTPUT);
-  
+
   pinMode(MIC_LED, OUTPUT);
-  
+
   pinMode(BABY_LED, OUTPUT);
-  
+
   pinMode(CAMERA_LED, OUTPUT);
 
   pinMode(GYRO, INPUT);
@@ -225,48 +235,48 @@ void loop() {
   if (checkingMicrophone) {
     checkMicrophone();
   }
-  
+
   startUp();
   extinguishFire();
   delay(100);
-  
+
   if (usingCamera()){
     digitalWrite(CAMERA_LED, HIGH);
   } else {
     digitalWrite(CAMERA_LED, LOW);
   }
-  
+
   if(detectBaby()){
     digitalWrite(BABY_LED, HIGH);
   } else {
     digitalWrite(BABY_LED, LOW);
   }
-  
+
 
   if (robotOn) {
-    
+
     extinguishFire();
-    
+
     delay(100);
-  
+
     if (detectFire()){
       digitalWrite(FLAME_LED, HIGH);
     } else {
       digitalWrite(FLAME_LED, LOW);
     }
-    
+
     if (usingCamera()){
       digitalWrite(CAMERA_LED, HIGH);
     } else {
       digitalWrite(CAMERA_LED, LOW);
     }
-    
+
     if(detectBaby()){
       digitalWrite(BABY_LED, HIGH);
     } else {
       digitalWrite(BABY_LED, LOW);
     }
-    
+
     if(hearingStartSound){
       digitalWrite(MIC_LED, HIGH);
     } else {
