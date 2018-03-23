@@ -52,7 +52,7 @@ while(followdirection >= 7)
 
 while(followdirection = 8)
 {
-  void lowerRightRoom(){
+  //void lowerRightRoom(){
   turn(0); //turn(0) is a way to reset gyro measurements
 
   turn(-20); //turn the robot 45, but since it's so close to the wall, this needs to happen gradually
@@ -80,7 +80,6 @@ while(followdirection = 8)
   turn(-90);  //turn right towards the exit of the room
   moveForward(lateralMove);
   turn(0);
-}
 
 }
 
