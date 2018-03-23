@@ -48,7 +48,6 @@ void setup()
 
 void loop()
 {
-
     read_mpu_6050_data();
     //Subtract the offset values from the raw gyro values
     gyro_x -= gyro_x_cal;
