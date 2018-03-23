@@ -13,13 +13,19 @@
 #define BABY_LED 17
 #define CAMERA 15
 #define CAMERA_LED 16
+#define GYRO_INPUT_PIN 18
 
-#define FRONT_US_ECHO   2
-#define FRONT_US_TRIG   3
-#define LEFT_US_ECHO   18
-#define LEFT_US_TRIG   19
-#define RIGHT_US_ECHO  20
-#define RIGHT_US_TRIG 21
+//Ultrasonic Trigger and Echo pins (30-39)
+#define F_L_ECHO  30  //Front-left Ultrasonic
+#define F_L_TRIG  31
+#define F_R_ECHO  32  //Front-right Ultrasonic
+#define F_R_TRIG  33
+#define R_ECHO  34  //Right Ultrasonic
+#define R_TRIG  35
+#define B_ECHO  36  //Back Ultrasonic
+#define B_TRIG  37
+#define L_ECHO  38  //Left Ultrasonic
+#define L_TRIG  39
 
 // Bounds for start sound frequency:
 #define LOW_START 3306
@@ -29,33 +35,30 @@ Servo leftServo;
 Servo rightServo;
 Servo extinguisher;
 
-Ultrasonic frontUltrasonic(FRONT_US_ECHO, FRONT_US_TRIG, true);
-Ultrasonic leftUltrasonic(LEFT_US_ECHO, LEFT_US_TRIG, true);
-Ultrasonic rightUltrasonic(RIGHT_US_ECHO, RIGHT_US_TRIG, true);
+Ultrasonic frontLeftUltrasonic(F_L_ECHO, F_L_TRIG, true);
+Ultrasonic frontRightUltrasonic(F_R_ECHO, F_R_TRIG, true);
+Ultrasonic leftUltrasonic(L_ECHO, L_TRIG, true);
+Ultrasonic rightUltrasonic(R_ECHO, R_TRIG, true);
+Ultrasonic backUltrasonic(B_ECHO, B_TRIG, true);
+
+//Gyroscope controls
+float gyroStartAngle;
+float gyroTargetAngle = 0;
 
 bool checkingMicrophone = true;
 bool hearingStartSound = false;
 bool robotOn = false;
 unsigned long freqCount;
+double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
-void moveForward() {
+void rollForward() {
   leftServo.write(180);
   rightServo.write(0);
 }
 
-void moveBackward() {
+void rollBackward() {
   leftServo.write(0);
   rightServo.write(180);
-}
-
-void moveLeft() {
-  leftServo.write(180);
-  rightServo.write(180);
-}
-
-void moveRight() {
-  leftServo.write(0);
-  rightServo.write(0);
 }
 
 void stopRobot() {
@@ -75,6 +78,45 @@ void stopExtinguisher(){
   extinguisher.write(90);
 }
 
+//Gyro functions
+//Resets the gyro so that the current positioning is angle "0" 
+void resetGyro(){
+  gyroStartAngle = digitalRead(GYRO_PIN);
+  gyroTargetAngle = 0;
+}
+
+//Returns the current angle of the robot relative to its starting angle
+float getGyroAngle(){
+  return digitalRead(GYRO_PIN)-gyroStartAngle;
+}
+
+//adjusts the target angle based on how much we want to turn and turns the robot until that target is reached
+//use turn(0) to simply get the gyro back on track if it's off target
+void turn(int angle){
+  gyroTargetAngle += angle;
+  if(gyroTargetAngle > 360){
+    gyroTargetAngle = 360 - gyroTargetAngle;
+  }
+  if(gyroTargetAngle < 0){
+    gyroTargetAngle = 360 + gyroTargetAngle
+  }
+  if(gyroTargetAngle < getGyroAngle()){
+    leftServo.write(180);
+    rightServo.write(180);
+    while(gyroTargetAngle < getGyroAngle()){
+      delay(50);
+    }
+    stopRobot();
+  }else if(gyroTargetAngle > getGyroAngle()){
+    leftServo.write(0);
+    rightServo.write(0);
+    while(gyroTargetAngle > getGyroAngle()){
+      delay(50);
+    }
+    stopRobot();
+  }
+}
+
 int detectBaby(){return 0;}
 int usingCamera(){return 0;}
 
@@ -86,8 +128,8 @@ void extinguishFire(){
      digitalWrite(FLAME_LED, LOW);
      }
     
-    if (frontUltrasonic.getDistance() > 3) {
-      moveForward();
+    if (frontLeftUltrasonic.getDistance() > 3) {
+      rollForward();
     } else {
       stopRobot();
       delay(500);
@@ -124,18 +166,34 @@ void checkMicrophone() {
   }
 }
 
-void mazeNav() { //MOVE MY MINION
-  if(frontUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() < 2){ //robot has wall in front and to left
-    moveRight();
-    delay(500);
+float calcAvg(float x,float y){
+  float avg=(x+y)/2;
+  return avg;
+}
+
+
+void startUp(){
+  //ping ultrasonics twice and average the values to get (hopefully) accurate values
+  float right=calcAvg(rightUltrasonic.getDistance(),rightUltrasonic.getDistance());
+  float left=calcAvg(leftUltrasonic.getDistance(),leftUltrasonic.getDistance());
+  float front=calcAvg(frontLeftUltrasonic.getDistance(),frontRightUltrasonic.getDistance());
+  float back=calcAvg(backUltrasonic.getDistance(),backUltrasonic.getDistance());
+  
+  if(right < closeToWall && back < closeToWall){  //robot is facing downward
+    turn(90);
   }
-  else if(frontUltrasonic.getDistance() < 2 && leftUltrasonic.getDistance() >= 2){ //robot has wall in front
-    moveLeft();
-    delay(500);
+  else if(right < closeToWall && front < closeToWall){  //robot is facing backward
+    turn(180);
   }
-  else{ //if(frontUltrasonic.getDistance() >=2 && leftUltrasonic.getDistance() <2), or if (frontUltrasonic.getDistance() >= 2 && leftUltrasonic.getDistance() >= 2): hug the left wall
-    moveForward();
-    delay(500);
+  else if(front < closeToWall && left < closeToWall){ //robot is facing upward
+    turn(-90);
+  }
+  else{   //robot is facing the correct direction
+    turn(0);
+  }
+
+  while(rightUltrasonic.getDistance() > closeToWall){   //roll forward until the first room is encountered, then kick out of function
+    rollForward();
   }
 }
 
@@ -156,6 +214,8 @@ void setup() {
   
   pinMode(CAMERA_LED, OUTPUT);
 
+  pinMode(GYRO, INPUT);
+
   FreqCount.begin(1000); // Begin measuring sound
 }
 
@@ -166,7 +226,7 @@ void loop() {
     checkMicrophone();
   }
   
-  mazeNav();
+  startUp();
   extinguishFire();
   delay(100);
   
@@ -184,7 +244,6 @@ void loop() {
   
 
   if (robotOn) {
-    mazeNav();
     
     extinguishFire();
     
