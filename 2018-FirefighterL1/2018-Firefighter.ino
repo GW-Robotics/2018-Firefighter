@@ -62,13 +62,15 @@ void rollBackward() {
   rightServo.write(180);
 }
 
-void moveslightleft() {
+void moveSlightLeft() {
   leftServo.write(135);
-  rightServo.write(20); //Half power minus additional 25
+  rightServo.write(20); //Half power plus additional 25
   delay(100);
 }
 
-void moveslightright() {
+void moveSlightRight() {
+  leftServo.write(160); //Half power plus additional 25
+  rightServo.write(45);
   delay(100);
 }
 
