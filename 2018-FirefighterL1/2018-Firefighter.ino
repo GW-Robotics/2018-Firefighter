@@ -6,7 +6,8 @@
 
 #define LEFT_SERVO_PIN  4
 #define RIGHT_SERVO_PIN 5
-#define IR_PIN 6
+#define IR_PIN_LEFT 6
+#define IR_PIN_RIGHT 20
 #define EXTINGUISHER_PIN 7
 #define FLAME_LED 9
 #define MIC_LED 11
@@ -215,7 +216,13 @@ void setup() {
   stopRobot();
   extinguisher.write(90);
 
-  pinMode(IR_PIN, INPUT);
+
+  pinMode(IR_PIN_LEFT, INPUT);
+  pinMode(IR_PIN_RIGHT, INPUT);
+
+  attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
+  attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
+
   pinMode(FLAME_LED, OUTPUT);
 
   pinMode(MIC_LED, OUTPUT);
