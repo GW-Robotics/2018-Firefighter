@@ -266,7 +266,7 @@ void loop() {
   } */
 
 
-  if (robotOn) {
+  /* if (robotOn) {
 
     extinguishFire();
 
@@ -295,5 +295,5 @@ void loop() {
     } else {
       digitalWrite(MIC_LED, LOW);
     }
-  }
+  } */
 }
