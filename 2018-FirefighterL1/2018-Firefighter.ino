@@ -250,10 +250,10 @@ void loop() {
   }
 
   startUp();
-  extinguishFire();
+  levelOneNav();
   delay(100);
 
-  /* if (usingCamera()){
+  /* if (usingCamera()){    //Only used for CV
     digitalWrite(CAMERA_LED, HIGH);
   } else {
     digitalWrite(CAMERA_LED, LOW);
@@ -266,7 +266,7 @@ void loop() {
   } */
 
 
-  /* if (robotOn) {
+  /* if (robotOn) {     //Not entirely sure what this code is for
 
     extinguishFire();
 

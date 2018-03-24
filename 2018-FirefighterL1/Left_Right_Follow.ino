@@ -1,3 +1,4 @@
+void levelOneNav(){
 followdirection = 0; //left follow or right follow
 lowerleftroomdistance = 10; //distance to activate Rick's Code
 
@@ -105,4 +106,5 @@ while(followdirection >= 9)
     delay(500);
     followdirection = followdirection + 1;
   }
+}
 }
