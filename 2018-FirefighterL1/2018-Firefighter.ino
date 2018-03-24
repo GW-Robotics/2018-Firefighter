@@ -245,7 +245,7 @@ void setup() {
 void loop() {
 // put your main code here, to run repeatedly:
 
-  if (checkingMicrophone) {
+  if (checkingMicrophone) {   //Robot doesn't start until it hears the start frequency
     checkMicrophone();
   }
 
@@ -253,7 +253,7 @@ void loop() {
   extinguishFire();
   delay(100);
 
-  if (usingCamera()){
+  /* if (usingCamera()){
     digitalWrite(CAMERA_LED, HIGH);
   } else {
     digitalWrite(CAMERA_LED, LOW);
@@ -263,7 +263,7 @@ void loop() {
     digitalWrite(BABY_LED, HIGH);
   } else {
     digitalWrite(BABY_LED, LOW);
-  }
+  } */
 
 
   if (robotOn) {
