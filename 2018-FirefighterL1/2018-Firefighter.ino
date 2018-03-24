@@ -80,7 +80,11 @@ void stopRobot() {
 }
 
 boolean detectFire(){
-  return digitalRead(IR_PIN);
+  if(digitalRead(IR_PIN_RIGHT || IR_PIN_RIGHT)){
+    return true;
+  } else {
+    return false;
+  }
 }
 
 void startExtinguisher(){
