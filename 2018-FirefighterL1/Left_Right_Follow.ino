@@ -4,22 +4,22 @@ lowerleftroomdistance = 10; //distance to activate Rick's Code
 
 while(followDirection < 7)
 {
-  if (frontRightUltrasonic.getDistance() > 2 && rightUltrasonic.getDistance() < 2)
+  if (frontRightUltrasonic.getDistance() > closeToWall && rightUltrasonic.getDistance() < closeToWall)
   {
     moveSlightLeft();
     delay(500);         //move left diagnal
-    moveSlightRight().wait(rightUltrasonic.getDistance() < 2);
+    moveSlightRight().wait(rightUltrasonic.getDistance() < closeToWall);
     delay(500);    //move diagnol towards the wall until your close to the wall
   }
 
-  else if(rightUltrasonic.getDistance() > 2 && frontRightUltrasonic.getDistance() > 2)
+  else if(rightUltrasonic.getDistance() > closeToWall && frontRightUltrasonic.getDistance() > closeToWall)
   {
     turn(-90);    //if there is no right wall turn right
     delay(500);
     followDirection = followDirection +1;
   }
 
-  else if(rightUltrasonic.getDistance() < 2 && frontRightUltrasonic.getDistance() < 2)
+  else if(rightUltrasonic.getDistance() < closeToWall && frontRightUltrasonic.getDistance() < closeToWall)
   {
     turn(90);
     delay(500)
@@ -39,7 +39,7 @@ while(followDirection >= 7)
     delay(500);
   }
 
-  else if (leftUltrasonic.getDistance() > 2)
+  else if (leftUltrasonic.getDistance() > closeToWall)
   {
     moveright();    //if there is no left wall turn left
     delay(500);
@@ -94,13 +94,13 @@ while(followDirection >= 9)
     delay(500);
   }
 
-  else if (leftUltrasonic.getDistance() > 2 && frontLeftUltrasonic.getDistance() > 2)
+  else if (leftUltrasonic.getDistance() > closeToWall && frontLeftUltrasonic.getDistance() > closeToWall)
   {
     turn(90);
     delay(500);
     followDirection = followDirection + 1;
   }
-  else if (leftUltrasonic.getDistance() < 2 && frontLeftUltrasonic.getDistance() < 2)
+  else if (leftUltrasonic.getDistance() < closeToWall && frontLeftUltrasonic.getDistance() < closeToWall)
   {
     turn(-90);
     delay(500);
