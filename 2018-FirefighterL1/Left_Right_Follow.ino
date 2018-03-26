@@ -8,7 +8,9 @@ while(followDirection < 7)
   {
     moveSlightLeft();
     delay(500);         //move left diagnal
-    moveSlightRight().wait(rightUltrasonic.getDistance() < closeToWall);
+    while(rightUltrasonic.getDistance() > closeToWall) {
+      moveSlightRight();
+    }
     delay(500);    //move diagnol towards the wall until your close to the wall
   }
 
@@ -35,7 +37,9 @@ while(followDirection >= 7)
   {
     moveSlightRight();
     delay(500);    //move left diagnal
-    moveSlightLeft().wait(leftUltrasonic.getDistance() < closeToWall);
+    while(leftUltrasonic.getDistance() < closeToWall){
+      moveSlightLeft();
+    }
     delay(500);
   }
 
@@ -90,7 +94,9 @@ while(followDirection >= 9)
   {
     moveSlightRight();
     delay(500);    //move left diagnal
-    moveSlightLeft().wait(leftUltrasonic.getDistance() < closeToWall);
+    while(leftUltrasonic.getDistance() < closeToWall){
+      moveSlightLeft();
+    }
     delay(500);
   }
 
