@@ -196,16 +196,21 @@ void startUp(){
   float front=calcAvg(frontLeftUltrasonic.getDistance(),frontRightUltrasonic.getDistance());
   float back=calcAvg(backUltrasonic.getDistance(),backUltrasonic.getDistance());
 
-  if(right < closeToWall && back < closeToWall){  //robot is facing downward
+  if(right < closeToWall && back < closeToWall && left < closeToWall) {  //robot is facing downward WITH DOG
+    turn(0);
+  } else if(right < closeToWall && front < closeToWall && back < closeToWall){  //robot is facing backward WITH DOG
     turn(90);
-  }
-  else if(right < closeToWall && front < closeToWall){  //robot is facing backward
+  } else if(front < closeToWall && left < closeToWall && right < closeToWall){ //robot is facing upward WITH DOG
     turn(180);
-  }
-  else if(front < closeToWall && left < closeToWall){ //robot is facing upward
+  } else if(front < closeToWall && left < closeToWall && back < closeToWall){   //robot is facing the correct direction WITH DOG
     turn(-90);
-  }
-  else{   //robot is facing the correct direction
+  } else if(right < closeToWall && back < closeToWall) { //downward, no dog
+    turn(90);
+  } else if(right < closeToWall && front < closeToWall) { //backward, no dog
+    turn(180);
+  } else if(front < closeToWall && left < closeToWall) { //upward, no dog
+    turn(-90);
+  } else {  //forward, no dog
     turn(0);
   }
 
