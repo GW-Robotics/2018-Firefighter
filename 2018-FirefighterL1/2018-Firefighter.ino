@@ -65,12 +65,14 @@ void moveSlightLeft() {
   leftServo.write(135);
   rightServo.write(20); //Half power plus additional 25
   delay(100);
+  stopRobot();
 }
 
 void moveSlightRight() {
   leftServo.write(160); //Half power plus additional 25
   rightServo.write(45);
   delay(100);
+  stopRobot();
 }
 
 void stopRobot() {
@@ -226,7 +228,7 @@ void setup() {
   stopRobot();
   extinguisher.write(90);
 
-  
+
 
 
   pinMode(IR_PIN_LEFT, INPUT);
