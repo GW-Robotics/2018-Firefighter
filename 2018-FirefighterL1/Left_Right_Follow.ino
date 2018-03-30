@@ -27,10 +27,12 @@ void levelOneNav() {
     {
       turn(90);
       delay(500);
-      followDirection = followDirection + 1;
+      followDirection++;
     }
 
-    else followDirection = followDirection;
+    else {
+      followDirection;
+    }
   }
 
   while(followDirection >= 7)
@@ -57,26 +59,23 @@ void levelOneNav() {
     }
   }
 
-  while(followDirection = 8)
+  while(followDirection == 8)
   {
     //void lowerRightRoom(){
-    turn(0); //turn(0) is a way to reset gyro measurements
-
+    //ADD TURN(0) TO MOVE FUNCTION
+    
     turn(-20); //turn the robot 45, but since it's so close to the wall, this needs to happen gradually
     rollForward();
     delay(1000);
     stopRobot();
-    turn(0);
     turn(-25);
 
-    moveForward(diagonalMove);
+    //moveForward(diagonalMove);  //this function is located on Alex's laptop, which is currently dead
 
-    turn(0);
     turn(-90);
     delay(1000);  //see if there's fire in the upper corner
     turn(180);
     delay(1000);  //see if there's fire in the lower corner
-    turn(0);
     turn(-45);
 
     while(frontRightUltrasonic.getDistance() > closeToWall && frontLeftUltrasonic.getDistance() > closeToWall){ //roll forward until the robot gets close to the lower wall
@@ -85,7 +84,7 @@ void levelOneNav() {
     stopRobot();
 
     turn(-90);  //turn right towards the exit of the room
-    moveForward(lateralMove);
+    //moveForward(lateralMove); //see above
     turn(0);
 
   }

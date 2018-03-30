@@ -94,6 +94,9 @@ void startExtinguisher(){
 
 void stopExtinguisher(){
   extinguisher.write(90);
+  while(true){
+    digitalWrite(FLAME_LED, HIGH);
+  }
 }
 
 //Gyro functions
