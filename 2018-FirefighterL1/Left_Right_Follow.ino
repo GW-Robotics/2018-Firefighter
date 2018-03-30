@@ -26,7 +26,7 @@ void levelOneNav() {
     else if(rightUltrasonic.getDistance() < closeToWall && frontRightUltrasonic.getDistance() < closeToWall)
     {
       turn(90);
-      delay(500)
+      delay(500);
       followDirection = followDirection + 1;
     }
 

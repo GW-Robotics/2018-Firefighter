@@ -116,7 +116,7 @@ void turn(int angle){
     gyroTargetAngle = 360 - gyroTargetAngle;
   }
   if(gyroTargetAngle < 0){
-    gyroTargetAngle = 360 + gyroTargetAngle
+    gyroTargetAngle = 360 + gyroTargetAngle;
   }
   if(gyroTargetAngle < getGyroAngle()){
     leftServo.write(180);
