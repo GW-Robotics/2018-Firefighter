@@ -14,7 +14,6 @@
 #define BABY_LED 17
 #define CAMERA 15
 #define CAMERA_LED 16
-#define GYRO_INPUT_PIN 18
 
 //Ultrasonic Trigger and Echo pins (30-39)
 #define F_L_ECHO  30  //Front-left Ultrasonic
@@ -98,13 +97,13 @@ void stopExtinguisher(){
 //Gyro functions
 //Resets the gyro so that the current positioning is angle "0"
 void resetGyro(){
-  gyroStartAngle = digitalRead(GYRO_PIN);
+  gyroStartAngle = getGyroRoll();
   gyroTargetAngle = 0;
 }
 
 //Returns the current angle of the robot relative to its starting angle
 float getGyroAngle(){
-  return digitalRead(GYRO_PIN)-gyroStartAngle;
+  return getGyroRoll()-gyroStartAngle;
 }
 
 //adjusts the target angle based on how much we want to turn and turns the robot until that target is reached
@@ -227,6 +226,8 @@ void setup() {
   stopRobot();
   extinguisher.write(90);
 
+  
+
 
   pinMode(IR_PIN_LEFT, INPUT);
   pinMode(IR_PIN_RIGHT, INPUT);
@@ -242,7 +243,7 @@ void setup() {
 
   pinMode(CAMERA_LED, OUTPUT);
 
-  pinMode(GYRO, INPUT);
+  setup_gyro();
 
   FreqCount.begin(1000); // Begin measuring sound
 }
