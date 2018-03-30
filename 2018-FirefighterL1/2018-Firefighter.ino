@@ -61,13 +61,15 @@ void rollBackward() {
   rightServo.write(180);
 }
 
-void moveslightleft() {
+void moveSlightLeft() {
   leftServo.write(135);
-  rightServo.write(20); //Half power minus additional 25
+  rightServo.write(20); //Half power plus additional 25
   delay(100);
 }
 
-void moveslightright() {
+void moveSlightRight() {
+  leftServo.write(160); //Half power plus additional 25
+  rightServo.write(45);
   delay(100);
 }
 
@@ -77,7 +79,11 @@ void stopRobot() {
 }
 
 boolean detectFire(){
-  return digitalRead(IR_PIN);
+  if(digitalRead(IR_PIN_RIGHT || IR_PIN_RIGHT)){
+    return true;
+  } else {
+    return false;
+  }
 }
 
 void startExtinguisher(){
@@ -189,16 +195,21 @@ void startUp(){
   float front=calcAvg(frontLeftUltrasonic.getDistance(),frontRightUltrasonic.getDistance());
   float back=calcAvg(backUltrasonic.getDistance(),backUltrasonic.getDistance());
 
-  if(right < closeToWall && back < closeToWall){  //robot is facing downward
+  if(right < closeToWall && back < closeToWall && left < closeToWall) {  //robot is facing downward WITH DOG
+    turn(0);
+  } else if(right < closeToWall && front < closeToWall && back < closeToWall){  //robot is facing backward WITH DOG
     turn(90);
-  }
-  else if(right < closeToWall && front < closeToWall){  //robot is facing backward
+  } else if(front < closeToWall && left < closeToWall && right < closeToWall){ //robot is facing upward WITH DOG
     turn(180);
-  }
-  else if(front < closeToWall && left < closeToWall){ //robot is facing upward
+  } else if(front < closeToWall && left < closeToWall && back < closeToWall){   //robot is facing the correct direction WITH DOG
     turn(-90);
-  }
-  else{   //robot is facing the correct direction
+  } else if(right < closeToWall && back < closeToWall) { //downward, no dog
+    turn(90);
+  } else if(right < closeToWall && front < closeToWall) { //backward, no dog
+    turn(180);
+  } else if(front < closeToWall && left < closeToWall) { //upward, no dog
+    turn(-90);
+  } else {  //forward, no dog
     turn(0);
   }
 
@@ -240,15 +251,15 @@ void setup() {
 void loop() {
 // put your main code here, to run repeatedly:
 
-  if (checkingMicrophone) {
+  if (checkingMicrophone) {   //Robot doesn't start until it hears the start frequency
     checkMicrophone();
   }
 
   startUp();
-  extinguishFire();
+  levelOneNav();
   delay(100);
 
-  if (usingCamera()){
+  /* if (usingCamera()){    //Only used for CV
     digitalWrite(CAMERA_LED, HIGH);
   } else {
     digitalWrite(CAMERA_LED, LOW);
@@ -258,10 +269,10 @@ void loop() {
     digitalWrite(BABY_LED, HIGH);
   } else {
     digitalWrite(BABY_LED, LOW);
-  }
+  } */
 
 
-  if (robotOn) {
+  /* if (robotOn) {     //Not entirely sure what this code is for
 
     extinguishFire();
 
@@ -290,5 +301,5 @@ void loop() {
     } else {
       digitalWrite(MIC_LED, LOW);
     }
-  }
+  } */
 }
