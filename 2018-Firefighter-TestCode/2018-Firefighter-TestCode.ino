@@ -235,19 +235,17 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
 
   pinMode(FLAME_LED, OUTPUT);
-
   pinMode(MIC_LED, OUTPUT);
-
   pinMode(BABY_LED, OUTPUT);
-
   pinMode(CAMERA_LED, OUTPUT);
-
   pinMode(GYRO, INPUT);
-
   FreqCount.begin(1000); // Begin measuring sound
 }
 
 void loop() {
-// put your main code here, to run repeatedly
+  rollForward();
+}
 
+void extinguishFire() {
+  rollBackward();
 }
