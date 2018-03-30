@@ -89,7 +89,7 @@ void getGyroPitch()
     return angle_pitch_output;
 }
 
-void getGyroRoll()
+float getGyroRoll()
 {
 
     read_mpu_6050_data();
