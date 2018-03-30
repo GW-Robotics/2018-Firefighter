@@ -47,7 +47,7 @@ void levelOneNav() {
 
     else if (leftUltrasonic.getDistance() > closeToWall)
     {
-      moveright();    //if there is no left wall turn left
+      turn(90);    //if there is no left wall turn left
       delay(500);
       followDirection = followDirection + 1;
     }
@@ -63,7 +63,7 @@ void levelOneNav() {
     turn(0); //turn(0) is a way to reset gyro measurements
 
     turn(-20); //turn the robot 45, but since it's so close to the wall, this needs to happen gradually
-    moveForward();
+    rollForward();
     delay(1000);
     stopRobot();
     turn(0);
