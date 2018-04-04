@@ -14,7 +14,6 @@
 #define BABY_LED 17
 #define CAMERA 15
 #define CAMERA_LED 16
-#define GYRO_INPUT_PIN 18
 
 //Ultrasonic Trigger and Echo pins (30-39)
 #define F_L_ECHO  30  //Front-left Ultrasonic
@@ -66,12 +65,14 @@ void moveSlightLeft() {
   leftServo.write(135);
   rightServo.write(20); //Half power plus additional 25
   delay(100);
+  stopRobot();
 }
 
 void moveSlightRight() {
   leftServo.write(160); //Half power plus additional 25
   rightServo.write(45);
   delay(100);
+  stopRobot();
 }
 
 void stopRobot() {
@@ -93,18 +94,21 @@ void startExtinguisher(){
 
 void stopExtinguisher(){
   extinguisher.write(90);
+  while(true){
+    digitalWrite(FLAME_LED, HIGH);
+  }
 }
 
 //Gyro functions
 //Resets the gyro so that the current positioning is angle "0"
 void resetGyro(){
-  gyroStartAngle = digitalRead(GYRO_PIN);
+  gyroStartAngle = getGyroRoll();
   gyroTargetAngle = 0;
 }
 
 //Returns the current angle of the robot relative to its starting angle
 float getGyroAngle(){
-  return digitalRead(GYRO_PIN)-gyroStartAngle;
+  return getGyroRoll()-gyroStartAngle;
 }
 
 //adjusts the target angle based on how much we want to turn and turns the robot until that target is reached
@@ -115,7 +119,7 @@ void turn(int angle){
     gyroTargetAngle = 360 - gyroTargetAngle;
   }
   if(gyroTargetAngle < 0){
-    gyroTargetAngle = 360 + gyroTargetAngle
+    gyroTargetAngle = 360 + gyroTargetAngle;
   }
   if(gyroTargetAngle < getGyroAngle()){
     leftServo.write(180);
@@ -228,6 +232,8 @@ void setup() {
   extinguisher.write(90);
 
 
+
+
   pinMode(IR_PIN_LEFT, INPUT);
   pinMode(IR_PIN_RIGHT, INPUT);
 
@@ -235,17 +241,70 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
 
   pinMode(FLAME_LED, OUTPUT);
+
   pinMode(MIC_LED, OUTPUT);
+
   pinMode(BABY_LED, OUTPUT);
+
   pinMode(CAMERA_LED, OUTPUT);
-  pinMode(GYRO, INPUT);
+
+  setup_gyro();
+
   FreqCount.begin(1000); // Begin measuring sound
 }
 
 void loop() {
-  rollForward();
-}
+// put your main code here, to run repeatedly:
 
-void extinguishFire() {
-  rollBackward();
+  if (checkingMicrophone) {   //Robot doesn't start until it hears the start frequency
+    checkMicrophone();
+  }
+
+  startUp();
+  levelOneNav();
+  delay(100);
+
+  /* if (usingCamera()){    //Only used for CV
+    digitalWrite(CAMERA_LED, HIGH);
+  } else {
+    digitalWrite(CAMERA_LED, LOW);
+  }
+
+  if(detectBaby()){
+    digitalWrite(BABY_LED, HIGH);
+  } else {
+    digitalWrite(BABY_LED, LOW);
+  } */
+
+
+  /* if (robotOn) {     //Not entirely sure what this code is for
+
+    extinguishFire();
+
+    delay(100);
+
+    if (detectFire()){
+      digitalWrite(FLAME_LED, HIGH);
+    } else {
+      digitalWrite(FLAME_LED, LOW);
+    }
+
+    if (usingCamera()){
+      digitalWrite(CAMERA_LED, HIGH);
+    } else {
+      digitalWrite(CAMERA_LED, LOW);
+    }
+
+    if(detectBaby()){
+      digitalWrite(BABY_LED, HIGH);
+    } else {
+      digitalWrite(BABY_LED, LOW);
+    }
+
+    if(hearingStartSound){
+      digitalWrite(MIC_LED, HIGH);
+    } else {
+      digitalWrite(MIC_LED, LOW);
+    }
+  } */
 }
