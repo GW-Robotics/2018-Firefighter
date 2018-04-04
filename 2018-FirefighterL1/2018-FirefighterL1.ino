@@ -1,13 +1,19 @@
 #include <Servo.h>
+#include <Motor.h>
 
 #include <Ultrasonic.h>
 
 #include "FreqCount.h"
 
-#define LEFT_SERVO_PIN  4
-#define RIGHT_SERVO_PIN 5
+#define LEFT_MOTOR_1 8
+#define LEFT_MOTOR_2 9
+
+#define RIGHT_MOTOR_1 10
+#define RIGHT_MOTOR_2 11
+
 #define IR_PIN_LEFT 6
 #define IR_PIN_RIGHT 20
+
 #define EXTINGUISHER_PIN 7
 #define FLAME_LED 9
 #define MIC_LED 11
@@ -16,8 +22,8 @@
 #define CAMERA_LED 16
 
 //Ultrasonic Trigger and Echo pins (30-39)
-#define F_L_ECHO  30  //Front-left Ultrasonic
-#define F_L_TRIG  31
+//#define F_L_ECHO  30  //Front-left Ultrasonic
+//#define F_L_TRIG  31
 #define F_R_ECHO  32  //Front-right Ultrasonic
 #define F_R_TRIG  33
 #define R_ECHO  34  //Right Ultrasonic
@@ -31,11 +37,11 @@
 #define LOW_START 3306
 #define HIGH_START 4294
 
-Servo leftServo;
-Servo rightServo;
+Motor leftMotor(LEFT_MOTOR_1, LEFT_MOTOR_2);
+Motor rightMotor(RIGHT_MOTOR_1,RIGHT_MOTOR_2);
 Servo extinguisher;
 
-Ultrasonic frontLeftUltrasonic(F_L_ECHO, F_L_TRIG, true);
+//Ultrasonic frontLeftUltrasonic(F_L_ECHO, F_L_TRIG, true);
 Ultrasonic frontRightUltrasonic(F_R_ECHO, F_R_TRIG, true);
 Ultrasonic leftUltrasonic(L_ECHO, L_TRIG, true);
 Ultrasonic rightUltrasonic(R_ECHO, R_TRIG, true);
@@ -52,32 +58,32 @@ unsigned long freqCount;
 double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
 void rollForward() {
-  leftServo.write(180);
-  rightServo.write(0);
+  leftMotor.set(1);
+  rightMotor.set(1);
 }
 
 void rollBackward() {
-  leftServo.write(0);
-  rightServo.write(180);
+  leftMotor.set(-1);
+  rightMotor.set(-1);
 }
 
 void moveSlightLeft() {
-  leftServo.write(135);
-  rightServo.write(20); //Half power plus additional 25
+  leftMotor.set(0.5);
+  rightMotor.set(0.75);
   delay(100);
   stopRobot();
 }
 
 void moveSlightRight() {
-  leftServo.write(160); //Half power plus additional 25
-  rightServo.write(45);
+  leftMotor.set(0.75); //Half power plus additional 25
+  rightMotor.set(0.5);
   delay(100);
   stopRobot();
 }
 
 void stopRobot() {
-  leftServo.write(90);
-  rightServo.write(90);
+  leftMotor.set(0);
+  rightMotor.set(0);
 }
 
 boolean detectFire(){
@@ -122,15 +128,15 @@ void turn(int angle){
     gyroTargetAngle = 360 + gyroTargetAngle;
   }
   if(gyroTargetAngle < getGyroAngle()){
-    leftServo.write(180);
-    rightServo.write(180);
+    leftMotor.set(1);
+    rightMotor.set(1);
     while(gyroTargetAngle < getGyroAngle()){
       delay(50);
     }
     stopRobot();
   }else if(gyroTargetAngle > getGyroAngle()){
-    leftServo.write(0);
-    rightServo.write(0);
+    leftMotor.set(0);
+    rightMotor.set(0);
     while(gyroTargetAngle > getGyroAngle()){
       delay(50);
     }
@@ -149,7 +155,7 @@ void extinguishFire(){
      digitalWrite(FLAME_LED, LOW);
      }
 
-    if (frontLeftUltrasonic.getDistance() > 3) {
+    if (frontRightUltrasonic.getDistance() > 3) {
       rollForward();
     } else {
       stopRobot();
@@ -197,7 +203,7 @@ void startUp(){
   //ping ultrasonics twice and average the values to get (hopefully) accurate values
   float right=calcAvg(rightUltrasonic.getDistance(),rightUltrasonic.getDistance());
   float left=calcAvg(leftUltrasonic.getDistance(),leftUltrasonic.getDistance());
-  float front=calcAvg(frontLeftUltrasonic.getDistance(),frontRightUltrasonic.getDistance());
+  float front=calcAvg(frontRightUltrasonic.getDistance(),frontRightUltrasonic.getDistance());
   float back=calcAvg(backUltrasonic.getDistance(),backUltrasonic.getDistance());
 
   if(right < closeToWall && back < closeToWall && left < closeToWall) {  //robot is facing downward WITH DOG
@@ -225,14 +231,9 @@ void startUp(){
 
 void setup() {
   // put your setup code here, to run once:
-  leftServo.attach(LEFT_SERVO_PIN);
-  rightServo.attach(RIGHT_SERVO_PIN);
   extinguisher.attach(EXTINGUISHER_PIN);
   stopRobot();
   extinguisher.write(90);
-
-
-
 
   pinMode(IR_PIN_LEFT, INPUT);
   pinMode(IR_PIN_RIGHT, INPUT);

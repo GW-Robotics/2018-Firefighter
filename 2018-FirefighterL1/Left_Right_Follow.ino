@@ -37,7 +37,7 @@ void levelOneNav() {
 
   while(followDirection >= 7)
   {
-    if (frontLeftUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
+    if (frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
     {
       moveSlightRight();
       delay(500);    //move left diagnal
@@ -78,7 +78,7 @@ void levelOneNav() {
     delay(1000);  //see if there's fire in the lower corner
     turn(-45);
 
-    while(frontRightUltrasonic.getDistance() > closeToWall && frontLeftUltrasonic.getDistance() > closeToWall){ //roll forward until the robot gets close to the lower wall
+    while(frontRightUltrasonic.getDistance() > closeToWall){ //roll forward until the robot gets close to the lower wall
       rollForward();
     }
     stopRobot();
@@ -91,7 +91,7 @@ void levelOneNav() {
 
   while(followDirection >= 9)
   {
-    if (frontLeftUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
+    if (frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
     {
       moveSlightRight();
       delay(500);    //move left diagnal
@@ -101,13 +101,13 @@ void levelOneNav() {
       delay(500);
     }
 
-    else if (leftUltrasonic.getDistance() > closeToWall && frontLeftUltrasonic.getDistance() > closeToWall)
+    else if (leftUltrasonic.getDistance() > closeToWall && frontRightUltrasonic.getDistance() > closeToWall)
     {
       turn(90);
       delay(500);
       followDirection = followDirection + 1;
     }
-    else if (leftUltrasonic.getDistance() < closeToWall && frontLeftUltrasonic.getDistance() < closeToWall)
+    else if (leftUltrasonic.getDistance() < closeToWall && frontRightUltrasonic.getDistance() < closeToWall)
     {
       turn(-90);
       delay(500);
