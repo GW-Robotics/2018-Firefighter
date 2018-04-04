@@ -41,6 +41,10 @@ Motor leftMotor(LEFT_MOTOR_1, LEFT_MOTOR_2);
 Motor rightMotor(RIGHT_MOTOR_1,RIGHT_MOTOR_2);
 Servo extinguisher;
 
+//Motor top speeds
+double rightSpeed = 0.5;
+double leftSpeed = 0.5;
+
 //Ultrasonic frontLeftUltrasonic(F_L_ECHO, F_L_TRIG, true);
 Ultrasonic frontRightUltrasonic(F_R_ECHO, F_R_TRIG, true);
 Ultrasonic leftUltrasonic(L_ECHO, L_TRIG, true);
@@ -58,25 +62,25 @@ unsigned long freqCount;
 double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
 void rollForward() {
-  leftMotor.set(0.5);
-  rightMotor.set(0.5);
+  leftMotor.set(leftSpeed);
+  rightMotor.set(rightSpeed);
 }
 
 void rollBackward() {
-  leftMotor.set(-0.5);
-  rightMotor.set(-0.5);
+  leftMotor.set(-leftSpeed);
+  rightMotor.set(-rightSpeed);
 }
 
 void moveSlightLeft() {
-  leftMotor.set(0.25);
-  rightMotor.set(0.375);
+  leftMotor.set(leftSpeed/2);
+  rightMotor.set(rightSpeed*.75);
   delay(100);
   stopRobot();
 }
 
 void moveSlightRight() {
-  leftMotor.set(0.375); //Half power plus additional 25
-  rightMotor.set(0.25);
+  leftMotor.set(leftSpeed*.75); //Half power plus additional 25
+  rightMotor.set(rightSpeed/2);
   delay(100);
   stopRobot();
 }
@@ -128,8 +132,8 @@ void turn(int angle){
     gyroTargetAngle = 360 + gyroTargetAngle;
   }
   if(gyroTargetAngle < getGyroAngle()){
-    leftMotor.set(0.5);
-    rightMotor.set(0.5);
+    leftMotor.set(leftSpeed);
+    rightMotor.set(rightSpeed);
     while(gyroTargetAngle < getGyroAngle()){
       delay(50);
     }
