@@ -142,28 +142,7 @@ int detectBaby(){return 0;}
 int usingCamera(){return 0;}
 
 void extinguishFire(){
-  while (detectFire()) {
-     if (detectFire()){
-      digitalWrite(FLAME_LED, HIGH);
-     } else {
-     digitalWrite(FLAME_LED, LOW);
-     }
-
-    if (frontLeftUltrasonic.getDistance() > 3) {
-      rollForward();
-    } else {
-      stopRobot();
-      delay(500);
-
-      startExtinguisher();
-      delay(500);
-
-      if (!detectFire()) {
-        stopExtinguisher();
-      }
-    }
-    delay(100);
-  }
+  rollBackward();
 }
 
 void checkMicrophone() {
@@ -254,57 +233,5 @@ void setup() {
 }
 
 void loop() {
-// put your main code here, to run repeatedly:
-
-  if (checkingMicrophone) {   //Robot doesn't start until it hears the start frequency
-    checkMicrophone();
-  }
-
-  startUp();
-  levelOneNav();
-  delay(100);
-
-  /* if (usingCamera()){    //Only used for CV
-    digitalWrite(CAMERA_LED, HIGH);
-  } else {
-    digitalWrite(CAMERA_LED, LOW);
-  }
-
-  if(detectBaby()){
-    digitalWrite(BABY_LED, HIGH);
-  } else {
-    digitalWrite(BABY_LED, LOW);
-  } */
-
-
-  /* if (robotOn) {     //Not entirely sure what this code is for
-
-    extinguishFire();
-
-    delay(100);
-
-    if (detectFire()){
-      digitalWrite(FLAME_LED, HIGH);
-    } else {
-      digitalWrite(FLAME_LED, LOW);
-    }
-
-    if (usingCamera()){
-      digitalWrite(CAMERA_LED, HIGH);
-    } else {
-      digitalWrite(CAMERA_LED, LOW);
-    }
-
-    if(detectBaby()){
-      digitalWrite(BABY_LED, HIGH);
-    } else {
-      digitalWrite(BABY_LED, LOW);
-    }
-
-    if(hearingStartSound){
-      digitalWrite(MIC_LED, HIGH);
-    } else {
-      digitalWrite(MIC_LED, LOW);
-    }
-  } */
+  rollForward();
 }
