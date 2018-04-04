@@ -58,25 +58,25 @@ unsigned long freqCount;
 double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
 void rollForward() {
-  leftMotor.set(1);
-  rightMotor.set(1);
+  leftMotor.set(0.5);
+  rightMotor.set(0.5);
 }
 
 void rollBackward() {
-  leftMotor.set(-1);
-  rightMotor.set(-1);
+  leftMotor.set(-0.5);
+  rightMotor.set(-0.5);
 }
 
 void moveSlightLeft() {
-  leftMotor.set(0.5);
-  rightMotor.set(0.75);
+  leftMotor.set(0.25);
+  rightMotor.set(0.375);
   delay(100);
   stopRobot();
 }
 
 void moveSlightRight() {
-  leftMotor.set(0.75); //Half power plus additional 25
-  rightMotor.set(0.5);
+  leftMotor.set(0.375); //Half power plus additional 25
+  rightMotor.set(0.25);
   delay(100);
   stopRobot();
 }
@@ -128,8 +128,8 @@ void turn(int angle){
     gyroTargetAngle = 360 + gyroTargetAngle;
   }
   if(gyroTargetAngle < getGyroAngle()){
-    leftMotor.set(1);
-    rightMotor.set(1);
+    leftMotor.set(0.5);
+    rightMotor.set(0.5);
     while(gyroTargetAngle < getGyroAngle()){
       delay(50);
     }
