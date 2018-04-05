@@ -58,6 +58,10 @@ float gyroTargetAngle = 0;
 unsigned long freqCount;
 double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
+long getFreqCount() {
+  return freqCount;
+}
+
 void rollForward() {
   leftMotor.set(leftSpeed);
   rightMotor.set(rightSpeed);
@@ -230,36 +234,30 @@ void startUp(){
 void setup() {
   // put your setup code here, to run once:
   //extinguisher.attach(EXTINGUISHER_PIN);
-  stopRobot();
+  //stopRobot();
   //extinguisher.write(90);
+  
+  //pinMode(IR_PIN_LEFT, INPUT);
+  //pinMode(IR_PIN_RIGHT, INPUT);
+  
+  //attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
+  //attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
+  //pinMode(FLAME_LED, OUTPUT);
+  //pinMode(MIC_LED, OUTPUT);
 
-//  pinMode(IR_PIN_LEFT, INPUT);
-//  pinMode(IR_PIN_RIGHT, INPUT);
-//
-//  attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
-//  attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
-//
-//  pinMode(FLAME_LED, OUTPUT);
-//
-//  pinMode(MIC_LED, OUTPUT);
-//
-    Serial.begin(9600);
-    setup_gyro();
+  Serial.begin(9600);
+  setup_gyro();
+  resetGyro();
+  turn(60);
 
-    resetGyro();
-    turn(60);
-//
-//  FreqCount.begin(1000); // Begin measuring sound
+  //FreqCount.begin(1000); // Begin measuring sound
+  //checkMicrophone();  //robot stays in setup until frequency is heard
 }
 
 void loop() {
-// put your main code here, to run repeatedly:
-
-//  if (checkingMicrophone) {   //Robot doesn't start until it hears the start frequency
-//    checkMicrophone();
-//  }
-//
-//  startUp();
-//  levelOneNav();
+  
+  //startUp();
+  //levelOneNav();
   delay(100);
+
 }
