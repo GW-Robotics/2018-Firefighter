@@ -18,8 +18,8 @@
 #define CAMERA 15
 
 //LED Pins
-#define FLAME_LED 9
-#define MIC_LED 11
+#define FLAME_LED 30
+#define MIC_LED 31
 
 //Ultrasonic Trigger and Echo pins (30-39)
 #define F_R_ECHO  45  //Front-right Ultrasonic
@@ -132,7 +132,7 @@ void turn(int angle){
   else if(gyroTargetAngle < 0){
     gyroTargetAngle = 360 + gyroTargetAngle;
   }
-  
+
   if(gyroTargetAngle < getGyroAngle()){
     leftMotor.set(leftSpeed);
     rightMotor.set(rightSpeed);
