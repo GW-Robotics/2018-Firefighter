@@ -112,6 +112,7 @@ void stopExtinguisher(){
 //Gyro functions
 //Resets the gyro so that the current positioning is angle "0"
 void resetGyro(){
+  getRotation();
   gyroStartAngle = getRotation();
   gyroTargetAngle = 0;
 }
@@ -126,30 +127,30 @@ float getGyroAngle(){
 void turn(int angle){
   gyroTargetAngle += angle;
   if(gyroTargetAngle > 360){
-    gyroTargetAngle = 360 - gyroTargetAngle;
+    gyroTargetAngle = gyroTargetAngle - 360;
   }
-  if(gyroTargetAngle < 0){
+  else if(gyroTargetAngle < 0){
     gyroTargetAngle = 360 + gyroTargetAngle;
   }
+  
   if(gyroTargetAngle < getGyroAngle()){
     leftMotor.set(leftSpeed);
     rightMotor.set(rightSpeed);
     while(gyroTargetAngle < getGyroAngle()){
+      Serial.println(String(getRotation()));
       delay(50);
     }
     stopRobot();
   }else if(gyroTargetAngle > getGyroAngle()){
-    leftMotor.set(0);
-    rightMotor.set(0);
+    leftMotor.set(-leftSpeed);
+    rightMotor.set(-rightSpeed);
     while(gyroTargetAngle > getGyroAngle()){
+      Serial.println(String(getRotation()));
       delay(50);
     }
     stopRobot();
   }
 }
-
-int detectBaby(){return 0;}
-int usingCamera(){return 0;}
 
 void extinguishFire(){
   while (detectFire()) {
@@ -235,33 +236,37 @@ void startUp(){
 
 void setup() {
   // put your setup code here, to run once:
-  extinguisher.attach(EXTINGUISHER_PIN);
+  //extinguisher.attach(EXTINGUISHER_PIN);
   stopRobot();
-  extinguisher.write(90);
+  //extinguisher.write(90);
 
-  pinMode(IR_PIN_LEFT, INPUT);
-  pinMode(IR_PIN_RIGHT, INPUT);
+//  pinMode(IR_PIN_LEFT, INPUT);
+//  pinMode(IR_PIN_RIGHT, INPUT);
+//
+//  attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
+//  attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
+//
+//  pinMode(FLAME_LED, OUTPUT);
+//
+//  pinMode(MIC_LED, OUTPUT);
+//
+    Serial.begin(9600);
+    setup_gyro();
 
-  attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
-  attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
-
-  pinMode(FLAME_LED, OUTPUT);
-
-  pinMode(MIC_LED, OUTPUT);
-
-  setup_gyro();
-
-  FreqCount.begin(1000); // Begin measuring sound
+    resetGyro();
+    turn(60);
+//
+//  FreqCount.begin(1000); // Begin measuring sound
 }
 
 void loop() {
 // put your main code here, to run repeatedly:
 
-  if (checkingMicrophone) {   //Robot doesn't start until it hears the start frequency
-    checkMicrophone();
-  }
-
-  startUp();
-  levelOneNav();
+//  if (checkingMicrophone) {   //Robot doesn't start until it hears the start frequency
+//    checkMicrophone();
+//  }
+//
+//  startUp();
+//  levelOneNav();
   delay(100);
 }
