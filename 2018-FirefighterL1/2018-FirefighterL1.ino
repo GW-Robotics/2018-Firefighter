@@ -15,23 +15,24 @@
 #define IR_PIN_RIGHT 20
 
 #define EXTINGUISHER_PIN 7
+#define CAMERA 15
+
+//LED Pins
 #define FLAME_LED 9
 #define MIC_LED 11
-#define BABY_LED 17
-#define CAMERA 15
-#define CAMERA_LED 16
 
 //Ultrasonic Trigger and Echo pins (30-39)
-//#define F_L_ECHO  30  //Front-left Ultrasonic
-//#define F_L_TRIG  31
-#define F_R_ECHO  32  //Front-right Ultrasonic
-#define F_R_TRIG  33
-#define R_ECHO  34  //Right Ultrasonic
-#define R_TRIG  35
-#define B_ECHO  36  //Back Ultrasonic
-#define B_TRIG  37
-#define L_ECHO  38  //Left Ultrasonic
-#define L_TRIG  39
+#define F_R_ECHO  45  //Front-right Ultrasonic
+#define F_R_TRIG  44
+
+#define R_ECHO  53  //Right Ultrasonic
+#define R_TRIG  52
+
+#define B_ECHO  51  //Back Ultrasonic
+#define B_TRIG  50
+
+#define L_ECHO  46  //Left Ultrasonic
+#define L_TRIG  49
 
 // Bounds for start sound frequency:
 #define LOW_START 3306
@@ -45,7 +46,6 @@ Servo extinguisher;
 double rightSpeed = 0.5;
 double leftSpeed = 0.5;
 
-//Ultrasonic frontLeftUltrasonic(F_L_ECHO, F_L_TRIG, true);
 Ultrasonic frontRightUltrasonic(F_R_ECHO, F_R_TRIG, true);
 Ultrasonic leftUltrasonic(L_ECHO, L_TRIG, true);
 Ultrasonic rightUltrasonic(R_ECHO, R_TRIG, true);
@@ -112,13 +112,13 @@ void stopExtinguisher(){
 //Gyro functions
 //Resets the gyro so that the current positioning is angle "0"
 void resetGyro(){
-  gyroStartAngle = getGyroRoll();
+  gyroStartAngle = getRotation();
   gyroTargetAngle = 0;
 }
 
 //Returns the current angle of the robot relative to its starting angle
 float getGyroAngle(){
-  return getGyroRoll()-gyroStartAngle;
+  return getRotation()-gyroStartAngle;
 }
 
 //adjusts the target angle based on how much we want to turn and turns the robot until that target is reached
@@ -249,10 +249,6 @@ void setup() {
 
   pinMode(MIC_LED, OUTPUT);
 
-  pinMode(BABY_LED, OUTPUT);
-
-  pinMode(CAMERA_LED, OUTPUT);
-
   setup_gyro();
 
   FreqCount.begin(1000); // Begin measuring sound
@@ -268,48 +264,4 @@ void loop() {
   startUp();
   levelOneNav();
   delay(100);
-
-  /* if (usingCamera()){    //Only used for CV
-    digitalWrite(CAMERA_LED, HIGH);
-  } else {
-    digitalWrite(CAMERA_LED, LOW);
-  }
-
-  if(detectBaby()){
-    digitalWrite(BABY_LED, HIGH);
-  } else {
-    digitalWrite(BABY_LED, LOW);
-  } */
-
-
-  /* if (robotOn) {     //Not entirely sure what this code is for
-
-    extinguishFire();
-
-    delay(100);
-
-    if (detectFire()){
-      digitalWrite(FLAME_LED, HIGH);
-    } else {
-      digitalWrite(FLAME_LED, LOW);
-    }
-
-    if (usingCamera()){
-      digitalWrite(CAMERA_LED, HIGH);
-    } else {
-      digitalWrite(CAMERA_LED, LOW);
-    }
-
-    if(detectBaby()){
-      digitalWrite(BABY_LED, HIGH);
-    } else {
-      digitalWrite(BABY_LED, LOW);
-    }
-
-    if(hearingStartSound){
-      digitalWrite(MIC_LED, HIGH);
-    } else {
-      digitalWrite(MIC_LED, LOW);
-    }
-  } */
 }
