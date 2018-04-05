@@ -9,11 +9,15 @@ bool robotOn = false;
 bool checkingMicrophone = true;
 bool hearingStartSound = false;
 
+long getFreqCount() {
+  return freqCount;
+}
+
 void checkMicrophone() {
   // Measure sound:
   if (FreqCount.available()) {
     freqCount = FreqCount.read();
-    Serial.println(String(freqCount);
+    Serial.println(String(getFreqCount()));
   } else {
     freqCount = 0;
   }
