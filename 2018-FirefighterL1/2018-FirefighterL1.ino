@@ -55,9 +55,6 @@ Ultrasonic backUltrasonic(B_ECHO, B_TRIG, true);
 float gyroStartAngle;
 float gyroTargetAngle = 0;
 
-bool checkingMicrophone = true;
-bool hearingStartSound = false;
-bool robotOn = false;
 unsigned long freqCount;
 double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
@@ -179,23 +176,19 @@ void extinguishFire(){
 
 void checkMicrophone() {
   // Measure sound:
-  if (FreqCount.available()) {
-    freqCount = FreqCount.read();
-  } else {
-    freqCount = 0;
-  }
-
-  // If the sound frequency is within start sound bounds, turn on robot:
-  if (freqCount > LOW_START && freqCount < HIGH_START) {
-    robotOn = true; // Set the robot to on
-    hearingStartSound = true;
-  } else {
-    hearingStartSound = false;
-    if (robotOn) {
-      checkingMicrophone = false;
-      FreqCount.end();
+  while (true) {
+    if (FreqCount.available()) {
+      freqCount = FreqCount.read();
+      Serial.println(String(getFreqCount()));
+    } else {
+      freqCount = 0;
+    }
+    // If the sound frequency is within start sound bounds, turn on robot:
+    if (LOW_START < freqCount && freqCount < HIGH_START) {
+      break;
     }
   }
+}
 }
 
 float calcAvg(float x,float y){
