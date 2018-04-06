@@ -51,6 +51,8 @@ Ultrasonic leftUltrasonic(L_ECHO, L_TRIG, true);
 Ultrasonic rightUltrasonic(R_ECHO, R_TRIG, true);
 Ultrasonic backUltrasonic(B_ECHO, B_TRIG, true);
 
+float getRotation();
+
 //Gyroscope controls
 float gyroStartAngle;
 float gyroTargetAngle = 0;
@@ -193,7 +195,7 @@ void checkMicrophone() {
     }
   }
 }
-}
+
 
 float calcAvg(float x,float y){
   float avg=(x+y)/2;
