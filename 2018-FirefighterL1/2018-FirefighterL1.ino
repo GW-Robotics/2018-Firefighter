@@ -43,8 +43,8 @@ Motor rightMotor(RIGHT_MOTOR_1,RIGHT_MOTOR_2);
 Servo extinguisher;
 
 //Motor top speeds
-double rightSpeed = 0.25;
-double leftSpeed = 0.25;
+double rightSpeed = 0.3;
+double leftSpeed = 0.3;
 
 Ultrasonic frontRightUltrasonic(F_R_ECHO, F_R_TRIG, true);
 Ultrasonic leftUltrasonic(L_ECHO, L_TRIG, true);
@@ -265,8 +265,8 @@ void setup() {
   Serial.println("Setting up IR pins and interrupts");
   pinMode(IR_PIN_LEFT, INPUT);
   pinMode(IR_PIN_RIGHT, INPUT);
-  attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
-  attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
+  //attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
+  //attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
 
   Serial.println("Setting up flame, mic leds");
   pinMode(FLAME_LED, OUTPUT);
