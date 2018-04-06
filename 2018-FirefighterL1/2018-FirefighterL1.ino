@@ -216,6 +216,9 @@ void checkMicrophone() {
       break;
     }
   }
+  digitalWrite(MIC_LED, HIGH);
+  delay(1000);
+  digitalWrite(MIC_LED, LOW);
 }
 
 
