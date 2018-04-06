@@ -51,6 +51,10 @@ Ultrasonic leftUltrasonic(L_ECHO, L_TRIG, true);
 Ultrasonic rightUltrasonic(R_ECHO, R_TRIG, true);
 Ultrasonic backUltrasonic(B_ECHO, B_TRIG, true);
 
+//Move controls
+float v_max = 5;
+float t_acceleration = 0.5;
+
 float getRotation();
 
 //Gyroscope controls
@@ -74,6 +78,15 @@ void rollForward() {
 void rollBackward() {
   leftMotor.set(-leftSpeed);
   rightMotor.set(-rightSpeed);
+}
+
+void moveForward(float distance){
+  float time_travel = (distance/v_max) - t_acceleration;
+  leftMotor.set(leftSpeed);
+  rightMotor.set(rightSpeed);
+  delay(time_travel/1000);
+  leftMotor.set(0);
+  rightMotor.set(0);
 }
 
 void moveSlightLeft() {
