@@ -102,11 +102,11 @@ boolean detectFire(){
 }
 
 void startExtinguisher(){
-  extinguisher.write(180);
+  extinguisher.write(0);
 }
 
 void stopExtinguisher(){
-  extinguisher.write(90);
+  extinguisher.write(70);
   while(true){
     digitalWrite(FLAME_LED, HIGH);
   }
@@ -251,6 +251,8 @@ void setup() {
   setup_gyro();
   resetGyro();
   turn(60);
+
+  extinguisher.write(70);
 
   //FreqCount.begin(1000); // Begin measuring sound
   //checkMicrophone();  //robot stays in setup until frequency is heard
