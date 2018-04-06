@@ -43,8 +43,8 @@ Motor rightMotor(RIGHT_MOTOR_1,RIGHT_MOTOR_2);
 Servo extinguisher;
 
 //Motor top speeds
-double rightSpeed = 0.5;
-double leftSpeed = 0.5;
+double rightSpeed = 0.25;
+double leftSpeed = 0.25;
 
 Ultrasonic frontRightUltrasonic(F_R_ECHO, F_R_TRIG, true);
 Ultrasonic leftUltrasonic(L_ECHO, L_TRIG, true);
@@ -54,6 +54,8 @@ Ultrasonic backUltrasonic(B_ECHO, B_TRIG, true);
 //Gyroscope controls
 float gyroStartAngle;
 float gyroTargetAngle = 0;
+
+float angleThreshold = 3;
 
 bool checkingMicrophone = true;
 bool hearingStartSound = false;
@@ -112,44 +114,69 @@ void stopExtinguisher(){
 //Gyro functions
 //Resets the gyro so that the current positioning is angle "0"
 void resetGyro(){
-  getRotation();
+  for(int x=0; x<250; x++){
+    getRotation();
+    delay(25);
+  }
   gyroStartAngle = getRotation();
   gyroTargetAngle = 0;
 }
 
 //Returns the current angle of the robot relative to its starting angle
 float getGyroAngle(){
-  return getRotation()-gyroStartAngle;
+  float angle = getRotation() - gyroStartAngle;
+  if(angle >= 360){
+    angle = angle - 360;
+  }
+  else if(angle < 0){
+    angle = 360 + angle;
+  }
+  return angle;
 }
 
 //adjusts the target angle based on how much we want to turn and turns the robot until that target is reached
 //use turn(0) to simply get the gyro back on track if it's off target
 void turn(int angle){
   gyroTargetAngle += angle;
-  if(gyroTargetAngle > 360){
+  if(gyroTargetAngle >= 360){
     gyroTargetAngle = gyroTargetAngle - 360;
   }
   else if(gyroTargetAngle < 0){
     gyroTargetAngle = 360 + gyroTargetAngle;
   }
-  
-  if(gyroTargetAngle < getGyroAngle()){
+
+  if(angle > 0){
     leftMotor.set(leftSpeed);
-    rightMotor.set(rightSpeed);
-    while(gyroTargetAngle < getGyroAngle()){
-      Serial.println(String(getRotation()));
-      delay(50);
-    }
-    stopRobot();
-  }else if(gyroTargetAngle > getGyroAngle()){
-    leftMotor.set(-leftSpeed);
     rightMotor.set(-rightSpeed);
-    while(gyroTargetAngle > getGyroAngle()){
-      Serial.println(String(getRotation()));
-      delay(50);
-    }
-    stopRobot();
+  }else{
+    leftMotor.set(-leftSpeed);
+    rightMotor.set(rightSpeed);
   }
+
+  while(abs(getGyroAngle() - gyroTargetAngle) > angleThreshold){
+    Serial.println(String(getGyroAngle()));
+    delay(25);
+  }
+
+  stopRobot();
+  
+  // if(gyroTargetAngle < getGyroAngle()){
+  //   leftMotor.set(leftSpeed);
+  //   rightMotor.set(rightSpeed);
+  //   while(gyroTargetAngle < getGyroAngle()){
+  //     Serial.println(String(getRotation()));
+  //     delay(50);
+  //   }
+  //   stopRobot();
+  // }else if(gyroTargetAngle > getGyroAngle()){
+  //   leftMotor.set(-leftSpeed);
+  //   rightMotor.set(-rightSpeed);
+  //   while(gyroTargetAngle > getGyroAngle()){
+  //     Serial.println(String(getRotation()));
+  //     delay(50);
+  //   }
+  //   stopRobot();
+  // }
 }
 
 void extinguishFire(){
@@ -250,11 +277,11 @@ void setup() {
 //
 //  pinMode(MIC_LED, OUTPUT);
 //
-    Serial.begin(9600);
-    setup_gyro();
-
-    resetGyro();
-    turn(60);
+  Serial.begin(115200);
+  setup_gyro();
+  resetGyro();
+  
+  turn(90);
 //
 //  FreqCount.begin(1000); // Begin measuring sound
 }
