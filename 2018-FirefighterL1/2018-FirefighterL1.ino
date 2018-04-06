@@ -175,24 +175,6 @@ void turn(int angle){
   }
 
   stopRobot();
-  
-  // if(gyroTargetAngle < getGyroAngle()){
-  //   leftMotor.set(leftSpeed);
-  //   rightMotor.set(rightSpeed);
-  //   while(gyroTargetAngle < getGyroAngle()){
-  //     Serial.println(String(getRotation()));
-  //     delay(50);
-  //   }
-  //   stopRobot();
-  // }else if(gyroTargetAngle > getGyroAngle()){
-  //   leftMotor.set(-leftSpeed);
-  //   rightMotor.set(-rightSpeed);
-  //   while(gyroTargetAngle > getGyroAngle()){
-  //     Serial.println(String(getRotation()));
-  //     delay(50);
-  //   }
-  //   stopRobot();
-  // }
 }
 
 void extinguishFire(){
@@ -275,33 +257,34 @@ void startUp(){
 
 void setup() {
   // put your setup code here, to run once:
-  //extinguisher.attach(EXTINGUISHER_PIN);
-  //stopRobot();
-  //extinguisher.write(90);
-  
-  //pinMode(IR_PIN_LEFT, INPUT);
-  //pinMode(IR_PIN_RIGHT, INPUT);
-  
-  //attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
-  //attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
-  //pinMode(FLAME_LED, OUTPUT);
-  //pinMode(MIC_LED, OUTPUT);
-
   Serial.begin(115200);
-  setup_gyro();
-  resetGyro();
-  turn(60);
-
+  Serial.println("Setting up extinguisher");
+  extinguisher.attach(EXTINGUISHER_PIN);
   extinguisher.write(70);
 
-  //FreqCount.begin(1000); // Begin measuring sound
-  //checkMicrophone();  //robot stays in setup until frequency is heard
+  Serial.println("Setting up IR pins and interrupts");
+  pinMode(IR_PIN_LEFT, INPUT);
+  pinMode(IR_PIN_RIGHT, INPUT);
+  attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
+  attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
+
+  Serial.println("Setting up flame, mic leds");
+  pinMode(FLAME_LED, OUTPUT);
+  pinMode(MIC_LED, OUTPUT);
+
+  Serial.println("Setting up gyro");
+  setup_gyro();
+  resetGyro();
+
+  Serial.println("Listening for microphone");
+  FreqCount.begin(1000); // Begin measuring sound
+  checkMicrophone();  //robot stays in setup until frequency is heard
 }
 
 void loop() {
   
-  //startUp();
-  //levelOneNav();
+  startUp();
+  levelOneNav();
+  getRotation();
   delay(100);
-
 }
