@@ -18,8 +18,8 @@
 #define CAMERA 15
 
 //LED Pins
-#define FLAME_LED 9
-#define MIC_LED 11
+#define FLAME_LED 30
+#define MIC_LED 31
 
 //Ultrasonic Trigger and Echo pins (30-39)
 #define F_R_ECHO  45  //Front-right Ultrasonic
@@ -51,17 +51,20 @@ Ultrasonic leftUltrasonic(L_ECHO, L_TRIG, true);
 Ultrasonic rightUltrasonic(R_ECHO, R_TRIG, true);
 Ultrasonic backUltrasonic(B_ECHO, B_TRIG, true);
 
+float getRotation();
+
 //Gyroscope controls
 float gyroStartAngle;
 float gyroTargetAngle = 0;
 
 float angleThreshold = 3;
 
-bool checkingMicrophone = true;
-bool hearingStartSound = false;
-bool robotOn = false;
 unsigned long freqCount;
 double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
+
+long getFreqCount() {
+  return freqCount;
+}
 
 void rollForward() {
   leftMotor.set(leftSpeed);
@@ -101,11 +104,11 @@ boolean detectFire(){
 }
 
 void startExtinguisher(){
-  extinguisher.write(180);
+  extinguisher.write(0);
 }
 
 void stopExtinguisher(){
-  extinguisher.write(90);
+  extinguisher.write(70);
   while(true){
     digitalWrite(FLAME_LED, HIGH);
   }
@@ -206,24 +209,20 @@ void extinguishFire(){
 
 void checkMicrophone() {
   // Measure sound:
-  if (FreqCount.available()) {
-    freqCount = FreqCount.read();
-  } else {
-    freqCount = 0;
-  }
-
-  // If the sound frequency is within start sound bounds, turn on robot:
-  if (freqCount > LOW_START && freqCount < HIGH_START) {
-    robotOn = true; // Set the robot to on
-    hearingStartSound = true;
-  } else {
-    hearingStartSound = false;
-    if (robotOn) {
-      checkingMicrophone = false;
-      FreqCount.end();
+  while (true) {
+    if (FreqCount.available()) {
+      freqCount = FreqCount.read();
+      Serial.println(String(getFreqCount()));
+    } else {
+      freqCount = 0;
+    }
+    // If the sound frequency is within start sound bounds, turn on robot:
+    if (LOW_START < freqCount && freqCount < HIGH_START) {
+      break;
     }
   }
 }
+
 
 float calcAvg(float x,float y){
   float avg=(x+y)/2;
@@ -264,36 +263,32 @@ void startUp(){
 void setup() {
   // put your setup code here, to run once:
   //extinguisher.attach(EXTINGUISHER_PIN);
-  stopRobot();
+  //stopRobot();
   //extinguisher.write(90);
+  
+  //pinMode(IR_PIN_LEFT, INPUT);
+  //pinMode(IR_PIN_RIGHT, INPUT);
+  
+  //attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
+  //attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
+  //pinMode(FLAME_LED, OUTPUT);
+  //pinMode(MIC_LED, OUTPUT);
 
-//  pinMode(IR_PIN_LEFT, INPUT);
-//  pinMode(IR_PIN_RIGHT, INPUT);
-//
-//  attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
-//  attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
-//
-//  pinMode(FLAME_LED, OUTPUT);
-//
-//  pinMode(MIC_LED, OUTPUT);
-//
   Serial.begin(115200);
   setup_gyro();
   resetGyro();
-  
-  turn(90);
-//
-//  FreqCount.begin(1000); // Begin measuring sound
+  turn(60);
+
+  extinguisher.write(70);
+
+  //FreqCount.begin(1000); // Begin measuring sound
+  //checkMicrophone();  //robot stays in setup until frequency is heard
 }
 
 void loop() {
-// put your main code here, to run repeatedly:
-
-//  if (checkingMicrophone) {   //Robot doesn't start until it hears the start frequency
-//    checkMicrophone();
-//  }
-//
-//  startUp();
-//  levelOneNav();
+  
+  //startUp();
+  //levelOneNav();
   delay(100);
+
 }
