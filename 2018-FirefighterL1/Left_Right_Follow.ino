@@ -88,59 +88,60 @@ void levelOneNav() {
     }
     stopRobot();
     lowerRightRoom();
+    foreverLeftFollow();
   }
-  while(followDirection >= 7)
-  {
-    if (frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
-    {
-      moveSlightRight();
-      delay(500);    //move left diagnal
-      while(leftUltrasonic.getDistance() < closeToWall){
-        moveSlightLeft();
-      }
-      delay(500);
-    }
-
-    else if (leftUltrasonic.getDistance() > closeToWall)
-    {
-      turn(90);    // if there is no left wall turn left
-      delay(500);
-      followDirection = followDirection + 1;
-    }
-    else if (frontRightUltrasonic.getDistance() < lowerleftroomdistance)
-    {
-      followDirection = followDirection + 1;
-    }
-  }
+  // while(followDirection >= 7)
+  // {
+  //   if (frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
+  //   {
+  //     moveSlightRight();
+  //     delay(500);    //move left diagnal
+  //     while(leftUltrasonic.getDistance() < closeToWall){
+  //       moveSlightLeft();
+  //     }
+  //     delay(500);
+  //   }
+  //
+  //   else if (leftUltrasonic.getDistance() > closeToWall)
+  //   {
+  //     turn(90);    // if there is no left wall turn left
+  //     delay(500);
+  //     followDirection = followDirection + 1;
+  //   }
+  //   else if (frontRightUltrasonic.getDistance() < lowerleftroomdistance)
+  //   {
+  //     followDirection = followDirection + 1;
+  //   }
+  // }
 
   //previously, this was where the lowerRightRoom code tripped
 
-  while(followDirection >= 9)
-  {
-    if (frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
-    {
-      moveSlightRight();
-      delay(500);    //move left diagnal
-      while(leftUltrasonic.getDistance() < closeToWall){
-        moveSlightLeft();
-      }
-      delay(500);
-    }
-
-    else if (leftUltrasonic.getDistance() > closeToWall && frontRightUltrasonic.getDistance() > closeToWall)
-    {
-      turn(90);
-      delay(500);
-      followDirection = followDirection + 1;
-    }
-    else if (leftUltrasonic.getDistance() < closeToWall && frontRightUltrasonic.getDistance() < closeToWall)
-    {
-      turn(-90);
-      delay(500);
-      followDirection = followDirection + 1;
-    }
-  }
-}
+//   while(followDirection >= 9)
+//   {
+//     if (frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
+//     {
+//       moveSlightRight();
+//       delay(500);    //move left diagnal
+//       while(leftUltrasonic.getDistance() < closeToWall){
+//         moveSlightLeft();
+//       }
+//       delay(500);
+//     }
+//
+//     else if (leftUltrasonic.getDistance() > closeToWall && frontRightUltrasonic.getDistance() > closeToWall)
+//     {
+//       turn(90);
+//       delay(500);
+//       followDirection = followDirection + 1;
+//     }
+//     else if (leftUltrasonic.getDistance() < closeToWall && frontRightUltrasonic.getDistance() < closeToWall)
+//     {
+//       turn(-90);
+//       delay(500);
+//       followDirection = followDirection + 1;
+//     }
+//   }
+// }
 
 void lowerRightRoom(){
   turn(-45);
@@ -162,4 +163,15 @@ void lowerRightRoom(){
   turn(-90);  //turn right towards the exit of the room
   moveForward(lateralMove);
   turn(0);
+}
+
+void foreverLeftFollow(){
+  while (true) {
+    while(frontRightUltrasonic.getDistance() > closeToWall){
+      rollForward();
+      delay(500);
+      stopRobot();
+    }
+    turn(-90);
+  }
 }
