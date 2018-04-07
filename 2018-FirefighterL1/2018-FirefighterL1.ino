@@ -14,7 +14,7 @@
 #define IR_PIN_LEFT 2
 #define IR_PIN_RIGHT 3
 
-#define EXTINGUISHER_PIN 7
+#define EXTINGUISHER_PIN 11
 #define CAMERA 15
 
 //LED Pins
@@ -118,7 +118,7 @@ bool fireDetected = false;
 void detectFire(){
   if(!fireDetected && (digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW)){
     fireDetected = true;
-    Serial.println("FIRE FIRE FIRE!!!");
+    Serial.println("FIRE FIRE FIRE!");
     bool leftOn = false, rightOn = false;
     if(digitalRead(IR_PIN_LEFT) == LOW){
       leftOn = true;
@@ -137,10 +137,12 @@ void detectFire(){
       }
     }
     while(digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW){
-      Serial.println("Extinguishing!!!");
+      Serial.println("Extinguishing!");
       startExtinguisher();
-      delay(500);
+      Serial.println("Extinguisher running");
+      delay(2000);
       stopExtinguisher();
+      Serial.println("Extinguisher closed.");
       delay(1000);
       if(digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW)
         moveForward(2);
@@ -343,5 +345,6 @@ void loop() {
   //startUp();
   //levelOneNav();
   //getRotation();
+  stopRobot();
   delay(100);
 }
