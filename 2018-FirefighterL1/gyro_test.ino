@@ -1,5 +1,3 @@
-
-
 void setup_test() {
   setup_gyro();
 }

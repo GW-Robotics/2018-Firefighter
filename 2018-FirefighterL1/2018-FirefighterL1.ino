@@ -60,6 +60,7 @@ float v_max = 20;
 float t_acceleration = 0;
 
 float getRotation();
+void setup_gyro();
 
 //Gyroscope controls
 float gyroStartAngle;
@@ -105,6 +106,18 @@ void moveSlightRight() {
   rightMotor.set(rightSpeed/2);
   delay(100);
   stopRobot();
+}
+
+void rightTurn(int timeDelay){
+  rightMotor.set(rightSpeed);
+  delay(timeDelay);
+  rightMotor.set(0);
+}
+
+void leftTurn(int timeDelay){
+  leftMotor.set(leftSpeed);
+  delay(timeDelay);
+  leftMotor.set(0);
 }
 
 void stopRobot() {

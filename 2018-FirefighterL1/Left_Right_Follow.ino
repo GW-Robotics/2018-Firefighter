@@ -1,7 +1,7 @@
 int followDirection = 0; //left follow or right follow
 int lowerleftroomdistance = 10; //distance to activate Rick's Code
-double diagonalMove = 5; //how far the robot should move for its diagonal path
-double lateralMove = 5; //how far the robot should move to exit the lower right room
+double diagonalMove = 26; //how far the robot should move for its diagonal path
+double lateralMove = 23.875; //how far the robot should move to exit the lower right room
 
 void upperRightRoom()
 {
@@ -59,6 +59,39 @@ void secondDogCheck() { //robot is facing downward where the second dog could po
   delay(50);
 }
 
+void lowerRightRoom(){
+  turn(-45);
+
+  moveForward(diagonalMove);
+
+  turn(-90);
+  delay(1000);  //see if there's fire in the upper corner
+  turn(180);
+  delay(1000);  //see if there's fire in the lower corner
+  turn(-45);
+
+  while(frontRightUltrasonic.getDistance() > closeToWall){ //roll forward until the robot gets close to the lower wall
+    rollForward();
+    delay(50);
+  }
+  stopRobot();
+
+  turn(-90);  //turn right towards the exit of the room
+  moveForward(lateralMove);
+  turn(0);
+}
+
+void foreverLeftFollow(){
+  while (true) {
+    while(frontRightUltrasonic.getDistance() > closeToWall){
+      rollForward();
+      delay(500);
+      stopRobot();
+    }
+    turn(-90);
+  }
+}
+
 void levelOneNav() {
 
   upperRightRoom();
@@ -87,78 +120,57 @@ void levelOneNav() {
     }
     stopRobot();
     lowerRightRoom();
+    foreverLeftFollow();
   }
-  while(followDirection >= 7)
-  {
-    if (frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
-    {
-      moveSlightRight();
-      delay(500);    //move left diagnal
-      while(leftUltrasonic.getDistance() < closeToWall){
-        moveSlightLeft();
-      }
-      delay(500);
-    }
-
-    else if (leftUltrasonic.getDistance() > closeToWall)
-    {
-      turn(90);    // if there is no left wall turn left
-      delay(500);
-      followDirection = followDirection + 1;
-    }
-    else if (frontRightUltrasonic.getDistance() < lowerleftroomdistance)
-    {
-      followDirection = followDirection + 1;
-    }
-  }
+  // while(followDirection >= 7)
+  // {
+  //   if (frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
+  //   {
+  //     moveSlightRight();
+  //     delay(500);    //move left diagnal
+  //     while(leftUltrasonic.getDistance() < closeToWall){
+  //       moveSlightLeft();
+  //     }
+  //     delay(500);
+  //   }
+  //
+  //   else if (leftUltrasonic.getDistance() > closeToWall)
+  //   {
+  //     turn(90);    // if there is no left wall turn left
+  //     delay(500);
+  //     followDirection = followDirection + 1;
+  //   }
+  //   else if (frontRightUltrasonic.getDistance() < lowerleftroomdistance)
+  //   {
+  //     followDirection = followDirection + 1;
+  //   }
+  // }
 
   //previously, this was where the lowerRightRoom code tripped
 
-  while(followDirection >= 9)
-  {
-    if (frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
-    {
-      moveSlightRight();
-      delay(500);    //move left diagnal
-      while(leftUltrasonic.getDistance() < closeToWall){
-        moveSlightLeft();
-      }
-      delay(500);
-    }
-
-    else if (leftUltrasonic.getDistance() > closeToWall && frontRightUltrasonic.getDistance() > closeToWall)
-    {
-      turn(90);
-      delay(500);
-      followDirection = followDirection + 1;
-    }
-    else if (leftUltrasonic.getDistance() < closeToWall && frontRightUltrasonic.getDistance() < closeToWall)
-    {
-      turn(-90);
-      delay(500);
-      followDirection = followDirection + 1;
-    }
-  }
-}
-
-void lowerRightRoom(){
-  turn(-45);
-
-  moveForward(diagonalMove);
-
-  turn(-90);
-  delay(1000);  //see if there's fire in the upper corner
-  turn(180);
-  delay(1000);  //see if there's fire in the lower corner
-  turn(-45);
-
-  while(frontRightUltrasonic.getDistance() > closeToWall){ //roll forward until the robot gets close to the lower wall
-    rollForward();
-    delay(50);
-  }
-  stopRobot();
-
-  turn(-90);  //turn right towards the exit of the room
-  moveForward(lateralMove);
-  turn(0);
-}
+//   while(followDirection >= 9)
+//   {
+//     if (frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
+//     {
+//       moveSlightRight();
+//       delay(500);    //move left diagnal
+//       while(leftUltrasonic.getDistance() < closeToWall){
+//         moveSlightLeft();
+//       }
+//       delay(500);
+//     }
+//
+//     else if (leftUltrasonic.getDistance() > closeToWall && frontRightUltrasonic.getDistance() > closeToWall)
+//     {
+//       turn(90);
+//       delay(500);
+//       followDirection = followDirection + 1;
+//     }
+//     else if (leftUltrasonic.getDistance() < closeToWall && frontRightUltrasonic.getDistance() < closeToWall)
+//     {
+//       turn(-90);
+//       delay(500);
+//       followDirection = followDirection + 1;
+//     }
+//   }
+ }
