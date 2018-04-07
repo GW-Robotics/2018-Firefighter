@@ -3,7 +3,7 @@ void upperRightRoom()
   if(!dog1){
     moveForward(3);
     rollForward();
-    while(frontRightUltrasonic.getDistance() > closeToWall && RightUltrasonic.getDistance() < closeToWall){
+    while(frontRightUltrasonic.getDistance() > closeToWall && rightUltrasonic.getDistance() < closeToWall){
       delay(50);
     }
     stopRobot();
@@ -28,7 +28,7 @@ void upperRightRoom()
       delay(50);
     }
     stopRobot();
-    moveFoward(2);
+    moveForward(2);
     turn(90);
     moveForward(5);
     rollForward();
@@ -38,7 +38,6 @@ void upperRightRoom()
     stopRobot();
     moveForward(3);
     turn(-90);
-    while
   }
 }
 
@@ -67,7 +66,7 @@ void levelOneNav() {
     turn(90); //turn downward
     moveForward(36);  //move down past upperRightRoom
     turn(90); //turn left
-    moveFoward(60); //move back into position for lowerRightRoom
+    moveForward(60); //move back into position for lowerRightRoom
     turn(-90);
     rollForward();
     while(rightUltrasonic.getDistance() < closeToWall) {
