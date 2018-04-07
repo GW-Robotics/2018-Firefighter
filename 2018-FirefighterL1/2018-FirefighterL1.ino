@@ -280,14 +280,14 @@ void setup() {
   resetGyro();
 
   Serial.println("Listening for microphone");
-  FreqCount.begin(1000); // Begin measuring sound
+  FreqCount.begin(200); // Begin measuring sound
   checkMicrophone();  //robot stays in setup until frequency is heard
 }
 
 void loop() {
-  
-  startUp();
-  levelOneNav();
-  getRotation();
+
+  //startUp();
+  //levelOneNav();
+  //getRotation();
   delay(100);
 }
