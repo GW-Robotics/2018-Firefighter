@@ -75,10 +75,19 @@ void levelOneNav() {
     turn(90); //turn left
     moveFoward(60); //move back into position for lowerRightRoom
     turn(-90);
-    moveFoward(5);
+    rollForward();
+    while(rightUltrasonic.getDistance() < closeToWall) {
+      delay(50);
+    }
+    stopRobot();
     lowerRightRoom();
   } else {
-    //proceed forward and get to the lower right room the short way
+    rollForward();
+    while (rightUltrasonic.getDistance() < closeToWall) {
+      delay(50);
+    }
+    stopRobot();
+    lowerRightRoom();
   }
   while(followDirection >= 7)
   {
