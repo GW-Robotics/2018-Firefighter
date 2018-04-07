@@ -66,6 +66,7 @@ float gyroStartAngle;
 float gyroTargetAngle = 0;
 
 float angleThreshold = 3;
+float driftAngle = 30;
 
 unsigned long freqCount;
 double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
@@ -157,6 +158,12 @@ float getGyroAngle(){
 //adjusts the target angle based on how much we want to turn and turns the robot until that target is reached
 //use turn(0) to simply get the gyro back on track if it's off target
 void turn(int angle){
+  if(angle > driftAngle){
+    angle -= driftAngle;
+  }else if(angle < -driftAngle){
+    angle += driftAngle;
+  }
+  
   gyroTargetAngle += angle;
   if(gyroTargetAngle >= 360){
     gyroTargetAngle = gyroTargetAngle - 360;
@@ -166,16 +173,16 @@ void turn(int angle){
   }
 
   if(angle > 0){
-    leftMotor.set(leftSpeed);
-    rightMotor.set(-rightSpeed);
-  }else{
     leftMotor.set(-leftSpeed);
     rightMotor.set(rightSpeed);
+  }else{
+    leftMotor.set(leftSpeed);
+    rightMotor.set(-rightSpeed);
   }
 
   while(abs(getGyroAngle() - gyroTargetAngle) > angleThreshold){
     Serial.println(String(getGyroAngle()));
-    delay(25);
+    delay(5);
   }
 
   stopRobot();
@@ -319,7 +326,7 @@ void setup() {
     FreqCount.begin(200); // Begin measuring sound
     checkMicrophone();  //robot stays in setup until frequency is heard
 
-    moveForward(36);
+    turn(90);
   }
 }
 
