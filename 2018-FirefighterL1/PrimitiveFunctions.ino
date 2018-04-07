@@ -1,11 +1,11 @@
-void rightTurn(int delay){
+void rightTurn(int timeDelay){
   rightMotor.set(rightSpeed);
-  delay(delay);
+  delay(timeDelay);
   rightMotor.set(0);
 }
 
-void leftTurn(int delay){
+void leftTurn(int timeDelay){
   leftMotor.set(leftSpeed);
-  delay(delay);
+  delay(timeDelay);
   leftMotor.set(0);
 }

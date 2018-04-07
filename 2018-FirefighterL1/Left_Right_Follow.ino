@@ -1,3 +1,8 @@
+int followDirection = 0; //left follow or right follow
+int lowerleftroomdistance = 10; //distance to activate Rick's Code
+double diagonalMove = 5; //how far the robot should move for its diagonal path
+double lateralMove = 5; //how far the robot should move to exit the lower right room
+
 void upperRightRoom()
 {
   if(!dog1){
@@ -50,10 +55,6 @@ void secondDogCheck() { //robot is facing downward where the second dog could po
 }
 
 void levelOneNav() {
-  int followDirection = 0; //left follow or right follow
-  int lowerleftroomdistance = 10; //distance to activate Rick's Code
-  double diagonalMove = 5; //how far the robot should move for its diagonal path
-  double lateralMove = 5; //how far the robot should move to exit the lower right room
 
   upperRightRoom();
   if(!dog1){
