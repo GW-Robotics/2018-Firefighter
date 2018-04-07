@@ -206,7 +206,7 @@ void checkMicrophone() {
   // Measure sound:
   while (true) {
     if (FreqCount.available()) {
-      freqCount = FreqCount.read();
+      freqCount = FreqCount.read() * 5;
       Serial.println(String(getFreqCount()));
     } else {
       freqCount = 0;
@@ -255,7 +255,9 @@ void startUp(){
 
   while(rightUltrasonic.getDistance() > closeToWall){   //roll forward until the first room is encountered, then kick out of function
     rollForward();
+    delay(50);
   }
+  stopRobot();
 }
 
 void setup() {

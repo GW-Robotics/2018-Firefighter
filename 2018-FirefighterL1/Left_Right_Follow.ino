@@ -1,38 +1,34 @@
+void upperRightRoom()
+{
+  if (frontRightUltrasonic.getDistance() > closeToWall && rightUltrasonic.getDistance() < closeToWall)
+  {
+    moveSlightLeft();
+    delay(500);         // move left diagonal
+    while(rightUltrasonic.getDistance() > closeToWall) {
+      moveSlightRight();
+    }
+    delay(500);    // move diagnol towards the wall until your close to the wall
+  }
+  else if(rightUltrasonic.getDistance() > closeToWall && frontRightUltrasonic.getDistance() > closeToWall)
+  {
+    turn(-90);    // if there is no right wall turn right
+    moveForward(4);
+    turn(30);
+    turn(-210);
+    moveForward(4);
+    turn(-90);
+    delay(500);
+    followDirection = followDirection +1;
+  }
+}
+
 void levelOneNav() {
   int followDirection = 0; //left follow or right follow
   int lowerleftroomdistance = 10; //distance to activate Rick's Code
   double diagonalMove = 5; //how far the robot should move for its diagonal path
   double lateralMove = 5; //how far the robot should move to exit the lower right room
 
-  while(followDirection < 7)
-  {
-    if (frontRightUltrasonic.getDistance() > closeToWall && rightUltrasonic.getDistance() < closeToWall)
-    {
-      moveSlightLeft();
-      delay(500);         //move left diagonal
-      while(rightUltrasonic.getDistance() > closeToWall) {
-        moveSlightRight();
-      }
-      delay(500);    //move diagnol towards the wall until your close to the wall
-    }
-    else if(rightUltrasonic.getDistance() > closeToWall && frontRightUltrasonic.getDistance() > closeToWall)
-    {
-      turn(-90);    //if there is no right wall turn right
-      delay(500);
-      followDirection = followDirection +1;
-    }
-
-    else if(rightUltrasonic.getDistance() < closeToWall && frontRightUltrasonic.getDistance() < closeToWall)
-    {
-      turn(90);
-      delay(500);
-      followDirection++;
-    }
-
-    else {
-      followDirection;
-    }
-  }
+  upperRightRoom();
 
   while(followDirection >= 7)
   {
@@ -48,7 +44,7 @@ void levelOneNav() {
 
     else if (leftUltrasonic.getDistance() > closeToWall)
     {
-      turn(90);    //if there is no left wall turn left
+      turn(90);    // if there is no left wall turn left
       delay(500);
       followDirection = followDirection + 1;
     }
