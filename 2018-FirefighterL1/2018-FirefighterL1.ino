@@ -207,7 +207,6 @@ float getGyroAngle(){
 //adjusts the target angle based on how much we want to turn and turns the robot until that target is reached
 //use turn(0) to simply get the gyro back on track if it's off target
 void turn(int angle){
-  
 //  if(angle > driftAngle){
 //    angle -= driftAngle;
 //  }else if(angle < -driftAngle){
@@ -395,7 +394,11 @@ void setup() {
 }
 
 void loop() {
+<<<<<<< HEAD
   // startUp();
+=======
+  startUp();
+>>>>>>> f866db17488bfbecdee33da5a417dc852dee576b
   // levelOneNav();
   // getRotation();
   delay(100);
