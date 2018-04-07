@@ -394,11 +394,8 @@ void setup() {
 }
 
 void loop() {
-<<<<<<< HEAD
+
   // startUp();
-=======
-  startUp();
->>>>>>> f866db17488bfbecdee33da5a417dc852dee576b
   // levelOneNav();
   // getRotation();
   delay(100);

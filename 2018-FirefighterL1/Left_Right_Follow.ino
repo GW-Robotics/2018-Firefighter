@@ -1,4 +1,4 @@
-right90()int followDirection = 0; //left follow or right follow
+int followDirection = 0; //left follow or right follow
 int lowerleftroomdistance = 10; //distance to activate Rick's Code
 double diagonalMove = 26; //how far the robot should move for its diagonal path
 double lateralMove = 23.875; //how far the robot should move to exit the lower right room
