@@ -9,13 +9,12 @@ void levelOneNav() {
     if (frontRightUltrasonic.getDistance() > closeToWall && rightUltrasonic.getDistance() < closeToWall)
     {
       moveSlightLeft();
-      delay(500);         //move left diagnal
+      delay(500);         //move left diagonal
       while(rightUltrasonic.getDistance() > closeToWall) {
         moveSlightRight();
       }
       delay(500);    //move diagnol towards the wall until your close to the wall
     }
-
     else if(rightUltrasonic.getDistance() > closeToWall && frontRightUltrasonic.getDistance() > closeToWall)
     {
       turn(-90);    //if there is no right wall turn right

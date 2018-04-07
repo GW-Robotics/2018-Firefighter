@@ -286,8 +286,8 @@ void setup() {
 
 void loop() {
   
-  startUp();
-  levelOneNav();
+  //startUp();
+  //levelOneNav();
   getRotation();
   delay(100);
 }
