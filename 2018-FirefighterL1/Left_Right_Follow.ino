@@ -73,7 +73,10 @@ void levelOneNav() {
     turn(90); //turn downward
     moveForward(36);  //move down past upperRightRoom
     turn(90); //turn left
-    
+    moveFoward(60); //move back into position for lowerRightRoom
+    turn(-90);
+    moveFoward(5);
+    lowerRightRoom();
   } else {
     //proceed forward and get to the lower right room the short way
   }
@@ -101,31 +104,7 @@ void levelOneNav() {
     }
   }
 
-  while(followDirection == 8)
-  {
-    //void lowerRightRoom(){
-
-    turn(-45);
-
-    moveForward(diagonalMove);
-
-    turn(-90);
-    delay(1000);  //see if there's fire in the upper corner
-    turn(180);
-    delay(1000);  //see if there's fire in the lower corner
-    turn(-45);
-
-    while(frontRightUltrasonic.getDistance() > closeToWall){ //roll forward until the robot gets close to the lower wall
-      rollForward();
-      delay(50);
-    }
-    stopRobot();
-
-    turn(-90);  //turn right towards the exit of the room
-    moveForward(lateralMove);
-    turn(0);
-
-  }
+  //previously, this was where the lowerRightRoom code tripped
 
   while(followDirection >= 9)
   {
@@ -152,4 +131,26 @@ void levelOneNav() {
       followDirection = followDirection + 1;
     }
   }
+}
+
+void lowerRightRoom(){
+  turn(-45);
+
+  moveForward(diagonalMove);
+
+  turn(-90);
+  delay(1000);  //see if there's fire in the upper corner
+  turn(180);
+  delay(1000);  //see if there's fire in the lower corner
+  turn(-45);
+
+  while(frontRightUltrasonic.getDistance() > closeToWall){ //roll forward until the robot gets close to the lower wall
+    rollForward();
+    delay(50);
+  }
+  stopRobot();
+
+  turn(-90);  //turn right towards the exit of the room
+  moveForward(lateralMove);
+  turn(0);
 }
