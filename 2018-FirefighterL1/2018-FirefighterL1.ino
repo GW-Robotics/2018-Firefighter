@@ -220,9 +220,18 @@ void checkMicrophone() {
       break;
     }
   }
-  digitalWrite(MIC_LED, HIGH);
-  delay(1000);
-  digitalWrite(MIC_LED, LOW);
+  
+  flashLED(MIC_LED, 1000, 1);
+}
+
+void flashLED(int pin, int milliseconds, int numFlashes){
+  for(int x=0; x<numFlashes; x++){
+    digitalWrite(pin, HIGH);
+    delay(milliseconds);
+    digitalWrite(pin, LOW);
+    if(x < numFlashes-1)
+      delay(milliseconds);
+  }
 }
 
 
@@ -261,11 +270,23 @@ void startUp(){
     turn(0);
   }
 
-  rollForward();
-  while(rightUltrasonic.getDistance() > closeToWall){   //roll forward until the first room is encountered, then kick out of function
-    delay(50);
+  flashLED(MIC_LED, 500, 1);
+
+  if(!dog1){
+    rollForward();
+    while(rightUltrasonic.getDistance() > closeToWall){   //roll forward until the first room is encountered, then kick out of function
+      delay(50);
+    }
+    stopRobot();
+  }else{
+    rollForward();
+    while(leftUltrasonic.getDistance() > closeToWall){   //roll forward until the first room is encountered, then kick out of function
+      delay(50);
+    }
+    stopRobot();
   }
-  stopRobot();
+
+  flashLED(MIC_LED, 500, 2);
 }
 
 void setup() {

@@ -6,17 +6,22 @@ double lateralMove = 5; //how far the robot should move to exit the lower right 
 void upperRightRoom()
 {
   if(!dog1){
-    moveForward(3);
     rollForward();
     while(frontRightUltrasonic.getDistance() > closeToWall && rightUltrasonic.getDistance() < closeToWall){
       delay(50);
     }
     stopRobot();
+
+    flashLED(MIC_LED, 500, 3);
+
     moveForward(2);
     turn(-90);    // if there is no right wall turn right
     moveForward(4);
     turn(30);
     turn(-210);
+
+    flashLED(MIC_LED, 500, 4);
+
     moveForward(4);
     turn(-90);
     rollForward();
@@ -26,8 +31,9 @@ void upperRightRoom()
     stopRobot();
     turn(-90);
     stopRobot();
+
+    flashLED(MIC_LED, 500, 5);
   }else{
-    moveForward(5);
     rollForward();
     while(frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall){
       delay(50);
