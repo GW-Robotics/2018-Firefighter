@@ -205,7 +205,7 @@ void turn(int angle){
   }else if(angle < -driftAngle){
     angle += driftAngle;
   }
-  
+
   gyroTargetAngle += angle;
   if(gyroTargetAngle >= 360){
     gyroTargetAngle = gyroTargetAngle - 360;
@@ -235,10 +235,10 @@ void extinguishFire(){
   detachInterrupt(IR_PIN_RIGHT);
   pinMode(IR_PIN_LEFT, INPUT);
   pinMode(IR_PIN_RIGHT, INPUT);
-  
+
   digitalWrite(FLAME_LED, HIGH);
   Serial.println("FIRE");
-  
+
   interrupts();
 }
 
@@ -256,7 +256,7 @@ void checkMicrophone() {
       break;
     }
   }
-  
+
   flashLED(MIC_LED, 1000, 1);
 }
 
@@ -325,9 +325,25 @@ void startUp(){
   flashLED(MIC_LED, 500, 2);
 }
 
+void uselessTestThingPlzDelete(){
+  moveForward(43);
+  rightTurn(500);
+  moveForward(18);
+  rightTurn(500);
+  moveForward(18);
+  rightTurn(200);
+  delay(200);
+  rightTurn(200);
+  delay(200);
+  rightTurn(200);
+  delay(200);
+  digitalWrite(FLAME_LED, HIGH);
+  digitalWrite(MIC_LED, HIGH);
+}
+
 void setup() {
   stopRobot();
-  
+
   // put your setup code here, to run once:
   Serial.begin(115200);
   Serial.println("Setting up extinguisher");
