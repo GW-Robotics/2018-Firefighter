@@ -46,6 +46,10 @@ Servo extinguisher;
 double rightSpeed = 0.3;
 double leftSpeed = 0.3;
 
+//dog flags
+bool dog1 = false;
+bool dog2 = false;
+
 Ultrasonic frontRightUltrasonic(F_R_ECHO, F_R_TRIG, true);
 Ultrasonic leftUltrasonic(L_ECHO, L_TRIG, true);
 Ultrasonic rightUltrasonic(R_ECHO, R_TRIG, true);
@@ -287,7 +291,7 @@ void setup() {
 }
 
 void loop() {
-  
+
   //startUp();
   //levelOneNav();
   //getRotation();
