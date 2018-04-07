@@ -66,11 +66,11 @@ void setup_gyro();
 float gyroStartAngle;
 float gyroTargetAngle = 0;
 
-float angleThreshold = 3;
+float angleThreshold = 20;
 float driftAngle = 30;
 
 unsigned long freqCount;
-double closeToWall = 9;   //defines how close the robot should be (inches) to the wall to register as being "too close"
+double closeToWall = 7;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
 long getFreqCount() {
   return freqCount;
@@ -192,11 +192,11 @@ float getGyroAngle(){
 //adjusts the target angle based on how much we want to turn and turns the robot until that target is reached
 //use turn(0) to simply get the gyro back on track if it's off target
 void turn(int angle){
-  if(angle > driftAngle){
-    angle -= driftAngle;
-  }else if(angle < -driftAngle){
-    angle += driftAngle;
-  }
+//  if(angle > driftAngle){
+//    angle -= driftAngle;
+//  }else if(angle < -driftAngle){
+//    angle += driftAngle;
+//  }
   
   gyroTargetAngle += angle;
   if(gyroTargetAngle >= 360){
@@ -338,8 +338,6 @@ void setup() {
 }
 
 void loop() {
-  startUp();
-  levelOneNav();
-  getRotation();
-  delay(100);
+  turn(-90);
+  delay(2000);
 }
