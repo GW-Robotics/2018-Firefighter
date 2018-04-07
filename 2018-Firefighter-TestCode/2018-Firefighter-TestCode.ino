@@ -6,14 +6,14 @@
 
 #define LEFT_SERVO_PIN  4
 #define RIGHT_SERVO_PIN 5
-#define IR_PIN 6
+#define IR_PIN_LEFT 6
+#define IR_PIN_RIGHT 20
 #define EXTINGUISHER_PIN 7
 #define FLAME_LED 9
 #define MIC_LED 11
 #define BABY_LED 17
 #define CAMERA 15
 #define CAMERA_LED 16
-#define GYRO_INPUT_PIN 18
 
 //Ultrasonic Trigger and Echo pins (30-39)
 #define F_L_ECHO  30  //Front-left Ultrasonic
@@ -61,13 +61,31 @@ void rollBackward() {
   rightServo.write(180);
 }
 
+void moveSlightLeft() {
+  leftServo.write(135);
+  rightServo.write(20); //Half power plus additional 25
+  delay(100);
+  stopRobot();
+}
+
+void moveSlightRight() {
+  leftServo.write(160); //Half power plus additional 25
+  rightServo.write(45);
+  delay(100);
+  stopRobot();
+}
+
 void stopRobot() {
   leftServo.write(90);
   rightServo.write(90);
 }
 
 boolean detectFire(){
-  return digitalRead(IR_PIN);
+  if(digitalRead(IR_PIN_RIGHT || IR_PIN_RIGHT)){
+    return true;
+  } else {
+    return false;
+  }
 }
 
 void startExtinguisher(){
@@ -76,18 +94,21 @@ void startExtinguisher(){
 
 void stopExtinguisher(){
   extinguisher.write(90);
+  while(true){
+    digitalWrite(FLAME_LED, HIGH);
+  }
 }
 
 //Gyro functions
-//Resets the gyro so that the current positioning is angle "0" 
+//Resets the gyro so that the current positioning is angle "0"
 void resetGyro(){
-  gyroStartAngle = digitalRead(GYRO_PIN);
+  gyroStartAngle = getGyroRoll();
   gyroTargetAngle = 0;
 }
 
 //Returns the current angle of the robot relative to its starting angle
 float getGyroAngle(){
-  return digitalRead(GYRO_PIN)-gyroStartAngle;
+  return getGyroRoll()-gyroStartAngle;
 }
 
 //adjusts the target angle based on how much we want to turn and turns the robot until that target is reached
@@ -98,7 +119,7 @@ void turn(int angle){
     gyroTargetAngle = 360 - gyroTargetAngle;
   }
   if(gyroTargetAngle < 0){
-    gyroTargetAngle = 360 + gyroTargetAngle
+    gyroTargetAngle = 360 + gyroTargetAngle;
   }
   if(gyroTargetAngle < getGyroAngle()){
     leftServo.write(180);
@@ -121,28 +142,7 @@ int detectBaby(){return 0;}
 int usingCamera(){return 0;}
 
 void extinguishFire(){
-  while (detectFire()) {
-     if (detectFire()){
-      digitalWrite(FLAME_LED, HIGH);
-     } else {
-     digitalWrite(FLAME_LED, LOW);
-     }
-    
-    if (frontLeftUltrasonic.getDistance() > 3) {
-      rollForward();
-    } else {
-      stopRobot();
-      delay(500);
-      
-      startExtinguisher();
-      delay(500);
-      
-      if (!detectFire()) {
-        stopExtinguisher();
-      }
-    }
-    delay(100);
-  }
+  rollBackward();
 }
 
 void checkMicrophone() {
@@ -178,17 +178,22 @@ void startUp(){
   float left=calcAvg(leftUltrasonic.getDistance(),leftUltrasonic.getDistance());
   float front=calcAvg(frontLeftUltrasonic.getDistance(),frontRightUltrasonic.getDistance());
   float back=calcAvg(backUltrasonic.getDistance(),backUltrasonic.getDistance());
-  
-  if(right < closeToWall && back < closeToWall){  //robot is facing downward
+
+  if(right < closeToWall && back < closeToWall && left < closeToWall) {  //robot is facing downward WITH DOG
+    turn(0);
+  } else if(right < closeToWall && front < closeToWall && back < closeToWall){  //robot is facing backward WITH DOG
     turn(90);
-  }
-  else if(right < closeToWall && front < closeToWall){  //robot is facing backward
+  } else if(front < closeToWall && left < closeToWall && right < closeToWall){ //robot is facing upward WITH DOG
     turn(180);
-  }
-  else if(front < closeToWall && left < closeToWall){ //robot is facing upward
+  } else if(front < closeToWall && left < closeToWall && back < closeToWall){   //robot is facing the correct direction WITH DOG
     turn(-90);
-  }
-  else{   //robot is facing the correct direction
+  } else if(right < closeToWall && back < closeToWall) { //downward, no dog
+    turn(90);
+  } else if(right < closeToWall && front < closeToWall) { //backward, no dog
+    turn(180);
+  } else if(front < closeToWall && left < closeToWall) { //upward, no dog
+    turn(-90);
+  } else {  //forward, no dog
     turn(0);
   }
 
@@ -205,72 +210,28 @@ void setup() {
   stopRobot();
   extinguisher.write(90);
 
-  pinMode(IR_PIN, INPUT);
+
+
+
+  pinMode(IR_PIN_LEFT, INPUT);
+  pinMode(IR_PIN_RIGHT, INPUT);
+
+  attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
+  attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
+
   pinMode(FLAME_LED, OUTPUT);
-  
+
   pinMode(MIC_LED, OUTPUT);
-  
+
   pinMode(BABY_LED, OUTPUT);
-  
+
   pinMode(CAMERA_LED, OUTPUT);
 
-  pinMode(GYRO, INPUT);
+  setup_gyro();
 
   FreqCount.begin(1000); // Begin measuring sound
 }
 
 void loop() {
-// put your main code here, to run repeatedly:
-
-  if (checkingMicrophone) {
-    checkMicrophone();
-  }
-  
-  startUp();
-  extinguishFire();
-  delay(100);
-  
-  if (usingCamera()){
-    digitalWrite(CAMERA_LED, HIGH);
-  } else {
-    digitalWrite(CAMERA_LED, LOW);
-  }
-  
-  if(detectBaby()){
-    digitalWrite(BABY_LED, HIGH);
-  } else {
-    digitalWrite(BABY_LED, LOW);
-  }
-  
-
-  if (robotOn) {
-    
-    extinguishFire();
-    
-    delay(100);
-  
-    if (detectFire()){
-      digitalWrite(FLAME_LED, HIGH);
-    } else {
-      digitalWrite(FLAME_LED, LOW);
-    }
-    
-    if (usingCamera()){
-      digitalWrite(CAMERA_LED, HIGH);
-    } else {
-      digitalWrite(CAMERA_LED, LOW);
-    }
-    
-    if(detectBaby()){
-      digitalWrite(BABY_LED, HIGH);
-    } else {
-      digitalWrite(BABY_LED, LOW);
-    }
-    
-    if(hearingStartSound){
-      digitalWrite(MIC_LED, HIGH);
-    } else {
-      digitalWrite(MIC_LED, LOW);
-    }
-  }
+  rollForward();
 }
