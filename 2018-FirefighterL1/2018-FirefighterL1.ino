@@ -109,15 +109,29 @@ void moveSlightRight() {
 }
 
 void rightTurn(int timeDelay){
-  rightMotor.set(rightSpeed);
+  leftMotor.set(rightSpeed);
+  delay(timeDelay);
+  leftMotor.set(0);
+}
+
+void leftTurn(int timeDelay){
+  rightMotor.set(leftSpeed);
   delay(timeDelay);
   rightMotor.set(0);
 }
 
-void leftTurn(int timeDelay){
+void right90(){
   leftMotor.set(leftSpeed);
-  delay(timeDelay);
-  leftMotor.set(0);
+  rightMotor.set(-rightSpeed);
+  delay(450);
+  stopRobot();
+}
+
+void left90(){
+  leftMotor.set(-leftSpeed);
+  rightMotor.set(rightSpeed);
+  delay(450);
+  stopRobot();
 }
 
 void stopRobot() {
@@ -278,25 +292,28 @@ void startUp(){
   float back=calcAvg(backUltrasonic.getDistance(),backUltrasonic.getDistance());
 
   if(right < closeToWall && back < closeToWall && left < closeToWall) {  //robot is facing downward WITH DOG
-    turn(0);
     dog1 = true;
   } else if(right < closeToWall && front < closeToWall && back < closeToWall){  //robot is facing backward WITH DOG
-    turn(90);
+    left90();
     dog1 = true;
   } else if(front < closeToWall && left < closeToWall && right < closeToWall){ //robot is facing upward WITH DOG
-    turn(180);
+    left90();
+    delay(50);
+    left90();
     dog1 = true;
   } else if(front < closeToWall && left < closeToWall && back < closeToWall){   //robot is facing the correct direction WITH DOG
-    turn(-90);
+    right90();
     dog1 = true;
   } else if(right < closeToWall && back < closeToWall) { //downward, no dog
-    turn(90);
+    left90();
   } else if(right < closeToWall && front < closeToWall) { //backward, no dog
-    turn(180);
+    left90();
+    delay(50);
+    left90();
   } else if(front < closeToWall && left < closeToWall) { //upward, no dog
-    turn(-90);
+    right90();
   } else {  //forward, no dog
-    turn(0);
+    int a = 1;
   }
 
   flashLED(MIC_LED, 500, 1);
@@ -363,11 +380,13 @@ void setup() {
   extinguisher.attach(EXTINGUISHER_PIN);
   extinguisher.write(70);
   fireDetected = false;
+
+  right90();
 }
 
 void loop() {
   startUp();
-  levelOneNav();
-  getRotation();
+  // levelOneNav();
+  // getRotation();
   delay(100);
 }
