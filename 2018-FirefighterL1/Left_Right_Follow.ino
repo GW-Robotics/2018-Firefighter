@@ -47,6 +47,7 @@ void secondDogCheck() { //robot is facing downward where the second dog could po
   if(frontRightUltrasonic.getDistance() < dogDistance){
     dog2 = true;
   }
+  delay(50);
 }
 
 void levelOneNav() {
@@ -60,10 +61,27 @@ void levelOneNav() {
     secondDogCheck();
   }
 
-  if(dog2){
-    //turn around and get to the lower right room the long way
+  if(dog2) {
+    turn(-90); //turn towards start
+    moveForward(60); //move back to start
+    turn(90); //turn downward
+    moveForward(36);  //move down past upperRightRoom
+    turn(90); //turn left
+    moveFoward(60); //move back into position for lowerRightRoom
+    turn(-90);
+    rollForward();
+    while(rightUltrasonic.getDistance() < closeToWall) {
+      delay(50);
+    }
+    stopRobot();
+    lowerRightRoom();
   } else {
-    //proceed forward and get to the lower right room the short way
+    rollForward();
+    while (rightUltrasonic.getDistance() < closeToWall) {
+      delay(50);
+    }
+    stopRobot();
+    lowerRightRoom();
   }
   while(followDirection >= 7)
   {
@@ -89,31 +107,7 @@ void levelOneNav() {
     }
   }
 
-  while(followDirection == 8)
-  {
-    //void lowerRightRoom(){
-    //ADD TURN(0) TO MOVE FUNCTION
-
-    turn(-45);
-
-    //moveForward(diagonalMove);  //this function is located on Alex's laptop, which is currently dead
-
-    turn(-90);
-    delay(1000);  //see if there's fire in the upper corner
-    turn(180);
-    delay(1000);  //see if there's fire in the lower corner
-    turn(-45);
-
-    while(frontRightUltrasonic.getDistance() > closeToWall){ //roll forward until the robot gets close to the lower wall
-      rollForward();
-    }
-    stopRobot();
-
-    turn(-90);  //turn right towards the exit of the room
-    //moveForward(lateralMove); //see above
-    turn(0);
-
-  }
+  //previously, this was where the lowerRightRoom code tripped
 
   while(followDirection >= 9)
   {
@@ -140,4 +134,26 @@ void levelOneNav() {
       followDirection = followDirection + 1;
     }
   }
+}
+
+void lowerRightRoom(){
+  turn(-45);
+
+  moveForward(diagonalMove);
+
+  turn(-90);
+  delay(1000);  //see if there's fire in the upper corner
+  turn(180);
+  delay(1000);  //see if there's fire in the lower corner
+  turn(-45);
+
+  while(frontRightUltrasonic.getDistance() > closeToWall){ //roll forward until the robot gets close to the lower wall
+    rollForward();
+    delay(50);
+  }
+  stopRobot();
+
+  turn(-90);  //turn right towards the exit of the room
+  moveForward(lateralMove);
+  turn(0);
 }
