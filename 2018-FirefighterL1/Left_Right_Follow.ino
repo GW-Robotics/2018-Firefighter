@@ -34,6 +34,7 @@ void secondDogCheck() { //robot is facing downward where the second dog could po
   if(frontRightUltrasonic.getDistance() < dogDistance){
     dog2 = true;
   }
+  delay(50);
 }
 
 void levelOneNav() {
@@ -45,8 +46,13 @@ void levelOneNav() {
   upperRightRoom();
   secondDogCheck();
 
-  if(dog2){
-    //turn around and get to the lower right room the long way
+  if(dog2) {
+    turn(-90); //turn towards start
+    moveForward(60); //move back to start
+    turn(90); //turn downward
+    moveForward(36);  //move down past upperRightRoom
+    turn(90); //turn left
+    
   } else {
     //proceed forward and get to the lower right room the short way
   }
@@ -77,11 +83,10 @@ void levelOneNav() {
   while(followDirection == 8)
   {
     //void lowerRightRoom(){
-    //ADD TURN(0) TO MOVE FUNCTION
 
     turn(-45);
 
-    //moveForward(diagonalMove);  //this function is located on Alex's laptop, which is currently dead
+    moveForward(diagonalMove);
 
     turn(-90);
     delay(1000);  //see if there's fire in the upper corner
@@ -91,11 +96,12 @@ void levelOneNav() {
 
     while(frontRightUltrasonic.getDistance() > closeToWall){ //roll forward until the robot gets close to the lower wall
       rollForward();
+      delay(50);
     }
     stopRobot();
 
     turn(-90);  //turn right towards the exit of the room
-    //moveForward(lateralMove); //see above
+    moveForward(lateralMove);
     turn(0);
 
   }
