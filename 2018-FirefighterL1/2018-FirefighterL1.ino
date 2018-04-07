@@ -253,8 +253,8 @@ void startUp(){
     turn(0);
   }
 
+  rollForward();
   while(rightUltrasonic.getDistance() > closeToWall){   //roll forward until the first room is encountered, then kick out of function
-    rollForward();
     delay(50);
   }
   stopRobot();

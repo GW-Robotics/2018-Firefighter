@@ -17,8 +17,13 @@ void upperRightRoom()
     turn(-210);
     moveForward(4);
     turn(-90);
+    rollForward();
+    while(frontRightUltrasonic.getDistance() > closeToWall){
+      delay(50);
+    }
+    turn(-90);
+    stopRobot();
     delay(500);
-    followDirection = followDirection +1;
   }
 }
 
