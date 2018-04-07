@@ -38,7 +38,6 @@ void upperRightRoom()
     stopRobot();
     moveForward(3);
     turn(-90);
-    while
   }
 }
 
