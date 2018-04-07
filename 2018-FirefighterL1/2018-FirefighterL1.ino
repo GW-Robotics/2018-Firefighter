@@ -5,11 +5,11 @@
 
 #include "FreqCount.h"
 
-#define LEFT_MOTOR_1 8
-#define LEFT_MOTOR_2 9
+#define LEFT_MOTOR_1 6
+#define LEFT_MOTOR_2 7
 
-#define RIGHT_MOTOR_1 10
-#define RIGHT_MOTOR_2 11
+#define RIGHT_MOTOR_1 8
+#define RIGHT_MOTOR_2 9
 
 #define IR_PIN_LEFT 6
 #define IR_PIN_RIGHT 20
@@ -36,15 +36,15 @@
 
 // Bounds for start sound frequency:
 #define LOW_START 3306
-#define HIGH_START 4294
+#define HIGH_START 4200
 
 Motor leftMotor(LEFT_MOTOR_1, LEFT_MOTOR_2);
 Motor rightMotor(RIGHT_MOTOR_1,RIGHT_MOTOR_2);
 Servo extinguisher;
 
 //Motor top speeds
-double rightSpeed = 0.3;
-double leftSpeed = 0.3;
+double rightSpeed = 0.5;
+double leftSpeed = 0.5;
 
 //dog flags
 bool dog1 = false;
@@ -56,8 +56,8 @@ Ultrasonic rightUltrasonic(R_ECHO, R_TRIG, true);
 Ultrasonic backUltrasonic(B_ECHO, B_TRIG, true);
 
 //Move controls
-float v_max = 5;
-float t_acceleration = 0.5;
+float v_max = 24;
+float t_acceleration = 0;
 
 float getRotation();
 
@@ -88,7 +88,7 @@ void moveForward(float distance){
   float time_travel = (distance/v_max) - t_acceleration;
   leftMotor.set(leftSpeed);
   rightMotor.set(rightSpeed);
-  delay(time_travel/1000);
+  delay(time_travel*1000);
   leftMotor.set(0);
   rightMotor.set(0);
 }
@@ -290,6 +290,8 @@ void startUp(){
 }
 
 void setup() {
+  stopRobot();
+  
   // put your setup code here, to run once:
   Serial.begin(115200);
   Serial.println("Setting up extinguisher");
@@ -310,9 +312,15 @@ void setup() {
   setup_gyro();
   resetGyro();
 
-  Serial.println("Listening for microphone");
-  FreqCount.begin(200); // Begin measuring sound
-  checkMicrophone();  //robot stays in setup until frequency is heard
+  stopRobot();  //for the love of god stop
+
+  while(true){
+    Serial.println("Listening for microphone");
+    FreqCount.begin(200); // Begin measuring sound
+    checkMicrophone();  //robot stays in setup until frequency is heard
+
+    moveForward(36);
+  }
 }
 
 void loop() {
