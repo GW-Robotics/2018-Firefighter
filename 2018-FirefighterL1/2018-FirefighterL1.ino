@@ -109,15 +109,29 @@ void moveSlightRight() {
 }
 
 void rightTurn(int timeDelay){
-  rightMotor.set(rightSpeed);
+  leftMotor.set(rightSpeed);
+  delay(timeDelay);
+  leftMotor.set(0);
+}
+
+void leftTurn(int timeDelay){
+  rightMotor.set(leftSpeed);
   delay(timeDelay);
   rightMotor.set(0);
 }
 
-void leftTurn(int timeDelay){
+void right90(){
   leftMotor.set(leftSpeed);
-  delay(timeDelay);
-  leftMotor.set(0);
+  rightMotor.set(-rightSpeed);
+  delay(450);
+  stopRobot();
+}
+
+void left90(){
+  leftMotor.set(-leftSpeed);
+  rightMotor.set(rightSpeed);
+  delay(450);
+  stopRobot();
 }
 
 void stopRobot() {
@@ -192,12 +206,21 @@ float getGyroAngle(){
 //adjusts the target angle based on how much we want to turn and turns the robot until that target is reached
 //use turn(0) to simply get the gyro back on track if it's off target
 void turn(int angle){
+<<<<<<< HEAD
 //  if(angle > driftAngle){
 //    angle -= driftAngle;
 //  }else if(angle < -driftAngle){
 //    angle += driftAngle;
 //  }
   
+=======
+  if(angle > driftAngle){
+    angle -= driftAngle;
+  }else if(angle < -driftAngle){
+    angle += driftAngle;
+  }
+
+>>>>>>> 81fe2f49a44a75741a41ab35a8d0f838c68c9b76
   gyroTargetAngle += angle;
   if(gyroTargetAngle >= 360){
     gyroTargetAngle = gyroTargetAngle - 360;
@@ -222,6 +245,18 @@ void turn(int angle){
   stopRobot();
 }
 
+void extinguishFire(){
+  detachInterrupt(IR_PIN_LEFT);
+  detachInterrupt(IR_PIN_RIGHT);
+  pinMode(IR_PIN_LEFT, INPUT);
+  pinMode(IR_PIN_RIGHT, INPUT);
+
+  digitalWrite(FLAME_LED, HIGH);
+  Serial.println("FIRE");
+
+  interrupts();
+}
+
 void checkMicrophone() {
   // Measure sound:
   while (true) {
@@ -237,7 +272,7 @@ void checkMicrophone() {
       break;
     }
   }
-  
+
   flashLED(MIC_LED, 1000, 1);
 }
 
@@ -266,25 +301,28 @@ void startUp(){
   float back=calcAvg(backUltrasonic.getDistance(),backUltrasonic.getDistance());
 
   if(right < closeToWall && back < closeToWall && left < closeToWall) {  //robot is facing downward WITH DOG
-    turn(0);
     dog1 = true;
   } else if(right < closeToWall && front < closeToWall && back < closeToWall){  //robot is facing backward WITH DOG
-    turn(90);
+    left90();
     dog1 = true;
   } else if(front < closeToWall && left < closeToWall && right < closeToWall){ //robot is facing upward WITH DOG
-    turn(180);
+    left90();
+    delay(50);
+    left90();
     dog1 = true;
   } else if(front < closeToWall && left < closeToWall && back < closeToWall){   //robot is facing the correct direction WITH DOG
-    turn(-90);
+    right90();
     dog1 = true;
   } else if(right < closeToWall && back < closeToWall) { //downward, no dog
-    turn(90);
+    left90();
   } else if(right < closeToWall && front < closeToWall) { //backward, no dog
-    turn(180);
+    left90();
+    delay(50);
+    left90();
   } else if(front < closeToWall && left < closeToWall) { //upward, no dog
-    turn(-90);
+    right90();
   } else {  //forward, no dog
-    turn(0);
+    int a = 1;
   }
 
   flashLED(MIC_LED, 500, 1);
@@ -306,10 +344,26 @@ void startUp(){
   flashLED(MIC_LED, 500, 2);
 }
 
+void uselessTestThingPlzDelete(){
+  moveForward(43);
+  rightTurn(500);
+  moveForward(18);
+  rightTurn(500);
+  moveForward(18);
+  rightTurn(200);
+  delay(200);
+  rightTurn(200);
+  delay(200);
+  rightTurn(200);
+  delay(200);
+  digitalWrite(FLAME_LED, HIGH);
+  digitalWrite(MIC_LED, HIGH);
+}
+
 void setup() {
   fireDetected = true;
   stopRobot();
-  
+
   // put your setup code here, to run once:
   Serial.begin(115200);
 
@@ -335,9 +389,18 @@ void setup() {
   extinguisher.attach(EXTINGUISHER_PIN);
   extinguisher.write(70);
   fireDetected = false;
+
+  right90();
 }
 
 void loop() {
+<<<<<<< HEAD
   turn(-90);
   delay(2000);
+=======
+  startUp();
+  // levelOneNav();
+  // getRotation();
+  delay(100);
+>>>>>>> 81fe2f49a44a75741a41ab35a8d0f838c68c9b76
 }
