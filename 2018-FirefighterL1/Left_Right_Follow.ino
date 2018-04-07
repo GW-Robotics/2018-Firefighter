@@ -7,6 +7,7 @@ void upperRightRoom()
       delay(500);         // move left diagonal
       while(rightUltrasonic.getDistance() > closeToWall) {
         moveSlightRight();
+        delay(50);
       }
       delay(500);    // move diagnol towards the wall until your close to the wall
     }
@@ -26,6 +27,24 @@ void upperRightRoom()
       stopRobot();
       delay(500);
     }
+  }else{
+    moveForward(5);
+    rollForward();
+    while(frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall){
+      delay(50);
+    }
+    stopRobot();
+    moveFoward(2);
+    turn(90);
+    moveForward(5);
+    rollForward();
+    while(frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall){
+      delay(50);
+    }
+    stopRobot();
+    moveForward(3);
+    turn(-90);
+    while
   }
 }
 
@@ -44,7 +63,9 @@ void levelOneNav() {
   double lateralMove = 5; //how far the robot should move to exit the lower right room
 
   upperRightRoom();
-  secondDogCheck();
+  if(!dog1){
+    secondDogCheck();
+  }
 
   if(dog2) {
     turn(-90); //turn towards start
