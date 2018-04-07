@@ -1,32 +1,26 @@
 void upperRightRoom()
 {
   if(!dog1){
-    if (frontRightUltrasonic.getDistance() > closeToWall && rightUltrasonic.getDistance() < closeToWall)
-    {
-      moveSlightLeft();
-      delay(500);         // move left diagonal
-      while(rightUltrasonic.getDistance() > closeToWall) {
-        moveSlightRight();
-        delay(50);
-      }
-      delay(500);    // move diagnol towards the wall until your close to the wall
+    moveForward(3);
+    rollForward();
+    while(frontRightUltrasonic.getDistance() > closeToWall && RightUltrasonic.getDistance() < closeToWall){
+      delay(50);
     }
-    else if(rightUltrasonic.getDistance() > closeToWall && frontRightUltrasonic.getDistance() > closeToWall)
-    {
-      turn(-90);    // if there is no right wall turn right
-      moveForward(4);
-      turn(30);
-      turn(-210);
-      moveForward(4);
-      turn(-90);
-      rollForward();
-      while(frontRightUltrasonic.getDistance() > closeToWall){
-        delay(50);
-      }
-      turn(-90);
-      stopRobot();
-      delay(500);
+    stopRobot();
+    moveForward(2);
+    turn(-90);    // if there is no right wall turn right
+    moveForward(4);
+    turn(30);
+    turn(-210);
+    moveForward(4);
+    turn(-90);
+    rollForward();
+    while(frontRightUltrasonic.getDistance() > closeToWall){
+      delay(50);
     }
+    stopRobot();
+    turn(-90);
+    stopRobot();
   }else{
     moveForward(5);
     rollForward();
