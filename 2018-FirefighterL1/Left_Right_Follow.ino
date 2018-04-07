@@ -1,4 +1,4 @@
-int followDirection = 0; //left follow or right follow
+right90()int followDirection = 0; //left follow or right follow
 int lowerleftroomdistance = 10; //distance to activate Rick's Code
 double diagonalMove = 26; //how far the robot should move for its diagonal path
 double lateralMove = 23.875; //how far the robot should move to exit the lower right room
@@ -14,7 +14,7 @@ void upperRightRoom()
 
     flashLED(MIC_LED, 500, 3);
 
-    turn(-90);    // if there is no right wall turn right
+    right90();    // if there is no right wall turn right
     moveForward(8);
     turn(30);
     turn(-210);
@@ -22,13 +22,13 @@ void upperRightRoom()
     flashLED(MIC_LED, 500, 4);
 
     moveForward(8);
-    turn(-90);
+    right90();
     rollForward();
     while(frontRightUltrasonic.getDistance() > closeToWall){
       delay(50);
     }
     stopRobot();
-    turn(-90);
+    right90();
     stopRobot();
 
     flashLED(MIC_LED, 500, 5);
@@ -39,7 +39,7 @@ void upperRightRoom()
     }
     stopRobot();
     moveForward(2);
-    turn(90);
+    left90();
     moveForward(5);
     rollForward();
     while(frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall){
@@ -47,7 +47,7 @@ void upperRightRoom()
     }
     stopRobot();
     moveForward(3);
-    turn(-90);
+    right90();
   }
 }
 
@@ -64,7 +64,7 @@ void lowerRightRoom(){
 
   moveForward(diagonalMove);
 
-  turn(-90);
+  right90();
   delay(1000);  //see if there's fire in the upper corner
   turn(180);
   delay(1000);  //see if there's fire in the lower corner
@@ -76,7 +76,7 @@ void lowerRightRoom(){
   }
   stopRobot();
 
-  turn(-90);  //turn right towards the exit of the room
+  right90();  //turn right towards the exit of the room
   moveForward(lateralMove);
   turn(0);
 }
@@ -88,7 +88,7 @@ void foreverLeftFollow(){
       delay(500);
       stopRobot();
     }
-    turn(-90);
+    right90();
   }
 }
 
@@ -100,13 +100,13 @@ void levelOneNav() {
   }
 
   if(dog2) {
-    turn(-90); //turn towards start
+    right90(); //turn towards start
     moveForward(60); //move back to start
-    turn(90); //turn downward
+    left90(); //turn downward
     moveForward(36);  //move down past upperRightRoom
-    turn(90); //turn left
+    left90(); //turn left
     moveForward(60); //move back into position for lowerRightRoom
-    turn(-90);
+    right90();
     rollForward();
     while(rightUltrasonic.getDistance() < closeToWall) {
       delay(50);
