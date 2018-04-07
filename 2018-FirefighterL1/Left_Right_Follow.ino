@@ -27,6 +27,13 @@ void upperRightRoom()
   }
 }
 
+void secondDogCheck() { //robot is facing downward where the second dog could potentially be
+  double dogDistance = 3;
+  if(frontRightUltrasonic.getDistance() < dogDistance){
+    dog2 = true;
+  }
+}
+
 void levelOneNav() {
   int followDirection = 0; //left follow or right follow
   int lowerleftroomdistance = 10; //distance to activate Rick's Code
@@ -34,7 +41,13 @@ void levelOneNav() {
   double lateralMove = 5; //how far the robot should move to exit the lower right room
 
   upperRightRoom();
+  secondDogCheck();
 
+  if(dog2){
+    //turn around and get to the lower right room the long way
+  } else {
+    //proceed forward and get to the lower right room the short way
+  }
   while(followDirection >= 7)
   {
     if (frontRightUltrasonic.getDistance() > closeToWall && leftUltrasonic.getDistance() < closeToWall)
