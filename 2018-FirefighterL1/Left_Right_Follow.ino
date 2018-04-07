@@ -14,15 +14,14 @@ void upperRightRoom()
 
     flashLED(MIC_LED, 500, 3);
 
-    moveForward(2);
     turn(-90);    // if there is no right wall turn right
-    moveForward(4);
+    moveForward(8);
     turn(30);
     turn(-210);
 
     flashLED(MIC_LED, 500, 4);
 
-    moveForward(4);
+    moveForward(8);
     turn(-90);
     rollForward();
     while(frontRightUltrasonic.getDistance() > closeToWall){

@@ -43,8 +43,8 @@ Motor rightMotor(RIGHT_MOTOR_1,RIGHT_MOTOR_2);
 Servo extinguisher;
 
 //Motor top speeds
-double rightSpeed = 0.5;
-double leftSpeed = 0.5;
+double rightSpeed = 0.4;
+double leftSpeed = 0.4;
 
 //dog flags
 bool dog1 = false;
@@ -56,7 +56,7 @@ Ultrasonic rightUltrasonic(R_ECHO, R_TRIG, true);
 Ultrasonic backUltrasonic(B_ECHO, B_TRIG, true);
 
 //Move controls
-float v_max = 24;
+float v_max = 20;
 float t_acceleration = 0;
 
 float getRotation();
@@ -70,7 +70,7 @@ float angleThreshold = 3;
 float driftAngle = 30;
 
 unsigned long freqCount;
-double closeToWall = 2;   //defines how close the robot should be (inches) to the wall to register as being "too close"
+double closeToWall = 9;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
 long getFreqCount() {
   return freqCount;
@@ -151,10 +151,10 @@ void detectFire(){
     }
     while(digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW){
       Serial.println("Extinguishing!");
-      startExtinguisher();
+      extinguisher.write(0);
       Serial.println("Extinguisher running");
-      delay(2000);
-      stopExtinguisher();
+      delay(500);
+      extinguisher.write(70);
       Serial.println("Extinguisher closed.");
       delay(1000);
       if(digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW)
@@ -164,14 +164,6 @@ void detectFire(){
       digitalWrite(FLAME_LED, HIGH);
     }
   }
-}
-
-void startExtinguisher(){
-  extinguisher.write(0);
-}
-
-void stopExtinguisher(){
-  extinguisher.write(70);
 }
 
 //Gyro functions
@@ -253,6 +245,7 @@ void checkMicrophone() {
     }
     // If the sound frequency is within start sound bounds, turn on robot:
     if (LOW_START < freqCount && freqCount < HIGH_START) {
+      FreqCount.end();
       break;
     }
   }
@@ -342,13 +335,11 @@ void uselessTestThingPlzDelete(){
 }
 
 void setup() {
+  fireDetected = true;
   stopRobot();
 
   // put your setup code here, to run once:
   Serial.begin(115200);
-  Serial.println("Setting up extinguisher");
-  extinguisher.attach(EXTINGUISHER_PIN);
-  extinguisher.write(70);
 
   Serial.println("Setting up IR pins and interrupts");
   pinMode(IR_PIN_LEFT, INPUT);
@@ -367,13 +358,16 @@ void setup() {
   Serial.println("Listening for microphone");
   FreqCount.begin(200); // Begin measuring sound
   checkMicrophone();  //robot stays in setup until frequency is heard
+
+  Serial.println("Setting up extinguisher");
+  extinguisher.attach(EXTINGUISHER_PIN);
+  extinguisher.write(70);
+  fireDetected = false;
 }
 
 void loop() {
-
-  //startUp();
-  //levelOneNav();
-  //getRotation();
-  stopRobot();
+  startUp();
+  levelOneNav();
+  getRotation();
   delay(100);
 }
