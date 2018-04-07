@@ -241,12 +241,16 @@ void startUp(){
 
   if(right < closeToWall && back < closeToWall && left < closeToWall) {  //robot is facing downward WITH DOG
     turn(0);
+    dog1 = true;
   } else if(right < closeToWall && front < closeToWall && back < closeToWall){  //robot is facing backward WITH DOG
     turn(90);
+    dog1 = true;
   } else if(front < closeToWall && left < closeToWall && right < closeToWall){ //robot is facing upward WITH DOG
     turn(180);
+    dog1 = true;
   } else if(front < closeToWall && left < closeToWall && back < closeToWall){   //robot is facing the correct direction WITH DOG
     turn(-90);
+    dog1 = true;
   } else if(right < closeToWall && back < closeToWall) { //downward, no dog
     turn(90);
   } else if(right < closeToWall && front < closeToWall) { //backward, no dog
