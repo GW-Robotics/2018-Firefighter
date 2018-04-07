@@ -11,8 +11,8 @@
 #define RIGHT_MOTOR_1 8
 #define RIGHT_MOTOR_2 9
 
-#define IR_PIN_LEFT 6
-#define IR_PIN_RIGHT 20
+#define IR_PIN_LEFT 2
+#define IR_PIN_RIGHT 3
 
 #define EXTINGUISHER_PIN 7
 #define CAMERA 15
@@ -90,8 +90,7 @@ void moveForward(float distance){
   leftMotor.set(leftSpeed);
   rightMotor.set(rightSpeed);
   delay(time_travel*1000);
-  leftMotor.set(0);
-  rightMotor.set(0);
+  stopRobot();
 }
 
 void moveSlightLeft() {
@@ -111,13 +110,44 @@ void moveSlightRight() {
 void stopRobot() {
   leftMotor.set(0);
   rightMotor.set(0);
+
+  detectFire();
 }
 
-boolean detectFire(){
-  if(digitalRead(IR_PIN_RIGHT || IR_PIN_RIGHT)){
-    return true;
-  } else {
-    return false;
+bool fireDetected = false;
+void detectFire(){
+  if(!fireDetected && (digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW)){
+    fireDetected = true;
+    Serial.println("FIRE FIRE FIRE!!!");
+    bool leftOn = false, rightOn = false;
+    if(digitalRead(IR_PIN_LEFT) == LOW){
+      leftOn = true;
+    }
+    if(digitalRead(IR_PIN_RIGHT) == LOW){
+      rightOn = true;
+    }
+    if(!leftOn || !rightOn){
+      Serial.println("Rotating towards fire....");
+      if(leftOn){
+        rightTurn(500);
+        moveForward(3);
+      }else if(rightOn){
+        leftTurn(500);
+        moveForward(3);
+      }
+    }
+    while(digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW){
+      Serial.println("Extinguishing!!!");
+      startExtinguisher();
+      delay(500);
+      stopExtinguisher();
+      delay(1000);
+      if(digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW)
+        moveForward(2);
+    }
+    while(true){
+      digitalWrite(FLAME_LED, HIGH);
+    }
   }
 }
 
@@ -127,9 +157,6 @@ void startExtinguisher(){
 
 void stopExtinguisher(){
   extinguisher.write(70);
-  while(true){
-    digitalWrite(FLAME_LED, HIGH);
-  }
 }
 
 //Gyro functions
@@ -189,28 +216,15 @@ void turn(int angle){
 }
 
 void extinguishFire(){
-  while (detectFire()) {
-     if (detectFire()){
-      digitalWrite(FLAME_LED, HIGH);
-     } else {
-     digitalWrite(FLAME_LED, LOW);
-     }
-
-    if (frontRightUltrasonic.getDistance() > 3) {
-      rollForward();
-    } else {
-      stopRobot();
-      delay(500);
-
-      startExtinguisher();
-      delay(500);
-
-      if (!detectFire()) {
-        stopExtinguisher();
-      }
-    }
-    delay(100);
-  }
+  detachInterrupt(IR_PIN_LEFT);
+  detachInterrupt(IR_PIN_RIGHT);
+  pinMode(IR_PIN_LEFT, INPUT);
+  pinMode(IR_PIN_RIGHT, INPUT);
+  
+  digitalWrite(FLAME_LED, HIGH);
+  Serial.println("FIRE");
+  
+  interrupts();
 }
 
 void checkMicrophone() {
@@ -308,8 +322,6 @@ void setup() {
   Serial.println("Setting up IR pins and interrupts");
   pinMode(IR_PIN_LEFT, INPUT);
   pinMode(IR_PIN_RIGHT, INPUT);
-  //attachInterrupt(digitalPinToInterrupt(IR_PIN_LEFT), extinguishFire, RISING);
-  //attachInterrupt(digitalPinToInterrupt(IR_PIN_RIGHT), extinguishFire, RISING);
 
   Serial.println("Setting up flame, mic leds");
   pinMode(FLAME_LED, OUTPUT);
@@ -321,13 +333,9 @@ void setup() {
 
   stopRobot();  //for the love of god stop
 
-  while(true){
-    Serial.println("Listening for microphone");
-    FreqCount.begin(200); // Begin measuring sound
-    checkMicrophone();  //robot stays in setup until frequency is heard
-
-    turn(90);
-  }
+  Serial.println("Listening for microphone");
+  FreqCount.begin(200); // Begin measuring sound
+  checkMicrophone();  //robot stays in setup until frequency is heard
 }
 
 void loop() {
