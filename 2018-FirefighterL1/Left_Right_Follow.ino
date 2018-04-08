@@ -87,10 +87,10 @@ void foreverLeftFollow() {
       rollForward();
       delay(400);
       stopRobot();
-      if(leftUltrasonic.getDistance() > (closeToWall/2)){
-        moveSlightLeft();
-      }
-      delay(400);
+//      if(leftUltrasonic.getDistance() > (closeToWall/2)){
+//        moveSlightLeft();
+//      }
+//      delay(400);
     }
     right90();
   }
