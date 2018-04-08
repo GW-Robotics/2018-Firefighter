@@ -44,8 +44,8 @@ Motor rightMotor(RIGHT_MOTOR_1,RIGHT_MOTOR_2);
 Servo extinguisher;
 
 //Motor top speeds
-double rightSpeed = 0.4;
-double leftSpeed = 0.3;
+double rightSpeed = 0.5;
+double leftSpeed = 0.4;
 
 //dog flags
 bool dog1 = false;
@@ -367,9 +367,9 @@ void setup() {
   pinMode(FLAME_LED, OUTPUT);
   pinMode(MIC_LED, OUTPUT);
 
-  Serial.println("Setting up gyro");
-  setup_gyro();
-  resetGyro();
+//  Serial.println("Setting up gyro");
+//  setup_gyro();
+//  resetGyro();
 
   stopRobot();  //for the love of god stop
 
@@ -381,10 +381,10 @@ void setup() {
 }
 
 void loop() {
-  //foreverLeftFollow();
+  foreverLeftFollow();
   // startUp();
   // levelOneNav();
   // getRotation();
-  stopRobot();
+  //stopRobot();
   delay(100);
 }
