@@ -44,7 +44,7 @@ Motor rightMotor(RIGHT_MOTOR_1,RIGHT_MOTOR_2);
 Servo extinguisher;
 
 //Motor top speeds
-double rightSpeed = 0.4;
+double rightSpeed = 0.5;
 double leftSpeed = 0.4;
 
 //dog flags
@@ -62,6 +62,7 @@ float t_acceleration = 0;
 
 float getRotation();
 void setup_gyro();
+int squareTurnDelay = 180;
 
 //Gyroscope controls
 float gyroStartAngle;
@@ -71,7 +72,7 @@ float angleThreshold = 20;
 float driftAngle = 30;
 
 unsigned long freqCount;
-double closeToWall = 7;   //defines how close the robot should be (inches) to the wall to register as being "too close"
+double closeToWall = 6;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
 long getFreqCount() {
   return freqCount;
@@ -96,16 +97,16 @@ void moveForward(float distance){
 }
 
 void moveSlightLeft() {
-  leftMotor.set(leftSpeed/2);
-  rightMotor.set(rightSpeed*.75);
-  delay(100);
+  leftMotor.set(leftSpeed/3);
+  //rightMotor.set(rightSpeed*.75);
+  delay(50);
   stopRobot();
 }
 
 void moveSlightRight() {
   leftMotor.set(leftSpeed*.75); //Half power plus additional 25
-  rightMotor.set(rightSpeed/2);
-  delay(100);
+  //rightMotor.set(rightSpeed/2);
+  delay(50);
   stopRobot();
 }
 
@@ -374,9 +375,10 @@ void setup() {
 }
 
 void loop() {
-  //startUp();
+  foreverLeftFollow();
+  // startUp();
   // levelOneNav();
   // getRotation();
-  stopRobot();
+  //stopRobot();
   delay(100);
 }

@@ -81,18 +81,23 @@ void lowerRightRoom(){
   turn(0);
 }
 
-void foreverLeftFollow(){
+void foreverLeftFollow() {
   while (true) {
     while(frontRightUltrasonic.getDistance() > closeToWall){
       rollForward();
       delay(500);
       stopRobot();
-      if(leftUltrasonic.getDistance() > (closeToWall/2)){
+      if(leftUltrasonic.getDistance() > (closeToWall*.8)){
         moveSlightLeft();
       }
-      delay(500);
+      delay(200);
     }
+//    rollBackward();
+//    delay(80);
+    stopRobot();
+    delay(20);
     right90();
+    delay(100);
   }
 }
 
