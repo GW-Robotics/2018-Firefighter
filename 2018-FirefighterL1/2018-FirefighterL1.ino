@@ -62,7 +62,7 @@ float t_acceleration = 0;
 
 float getRotation();
 void setup_gyro();
-int squareTurnDelay = 180;
+int squareTurnDelay = 300;
 
 //Gyroscope controls
 float gyroStartAngle;
@@ -72,7 +72,7 @@ float angleThreshold = 20;
 float driftAngle = 30;
 
 unsigned long freqCount;
-double closeToWall = 6;   //defines how close the robot should be (inches) to the wall to register as being "too close"
+double closeToWall = 7;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
 long getFreqCount() {
   return freqCount;
@@ -97,7 +97,7 @@ void moveForward(float distance){
 }
 
 void moveSlightLeft() {
-  leftMotor.set(leftSpeed/3);
+  leftMotor.set(leftSpeed/2);
   //rightMotor.set(rightSpeed*.75);
   delay(50);
   stopRobot();
