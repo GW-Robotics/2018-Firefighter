@@ -45,7 +45,7 @@ Servo extinguisher;
 
 //Motor top speeds
 double rightSpeed = 0.4;
-double leftSpeed = 0.4;
+double leftSpeed = 0.3;
 
 //dog flags
 bool dog1 = false;
@@ -62,6 +62,7 @@ float t_acceleration = 0;
 
 float getRotation();
 void setup_gyro();
+int squareTurnDelay = 350;
 
 //Gyroscope controls
 float gyroStartAngle;
@@ -98,14 +99,14 @@ void moveForward(float distance){
 void moveSlightLeft() {
   leftMotor.set(leftSpeed/2);
   rightMotor.set(rightSpeed*.75);
-  delay(100);
+  delay(50);
   stopRobot();
 }
 
 void moveSlightRight() {
   leftMotor.set(leftSpeed*.75); //Half power plus additional 25
   rightMotor.set(rightSpeed/2);
-  delay(100);
+  delay(50);
   stopRobot();
 }
 
@@ -124,14 +125,14 @@ void leftTurn(int timeDelay){
 void right90(){
   leftMotor.set(leftSpeed);
   rightMotor.set(-rightSpeed);
-  delay(450);
+  delay(squareTurnDelay);
   stopRobot();
 }
 
 void left90(){
   leftMotor.set(-leftSpeed);
   rightMotor.set(rightSpeed);
-  delay(450);
+  delay(squareTurnDelay);
   stopRobot();
 }
 
@@ -212,7 +213,14 @@ void turn(int angle){
 //  }else if(angle < -driftAngle){
 //    angle += driftAngle;
 //  }
-  
+
+
+  if(angle > driftAngle){
+    angle -= driftAngle;
+  }else if(angle < -driftAngle){
+    angle += driftAngle;
+  }
+
   gyroTargetAngle += angle;
   if(gyroTargetAngle >= 360){
     gyroTargetAngle = gyroTargetAngle - 360;
@@ -373,7 +381,8 @@ void setup() {
 }
 
 void loop() {
-  //startUp();
+  //foreverLeftFollow();
+  // startUp();
   // levelOneNav();
   // getRotation();
   stopRobot();
