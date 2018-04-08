@@ -125,14 +125,14 @@ void leftTurn(int timeDelay){
 void right90(){
   leftMotor.set(leftSpeed);
   rightMotor.set(-rightSpeed);
-  delay(squareTurnDelay);
+  delay(450);
   stopRobot();
 }
 
 void left90(){
   leftMotor.set(-leftSpeed);
   rightMotor.set(rightSpeed);
-  delay(squareTurnDelay);
+  delay(450);
   stopRobot();
 }
 
@@ -158,10 +158,10 @@ void detectFire(){
     if(!leftOn || !rightOn){
       Serial.println("Rotating towards fire....");
       if(leftOn){
-        rightTurn(250);
+        rightTurn(100);
         moveForward(3);
       }else if(rightOn){
-        leftTurn(250);
+        leftTurn(100);
         moveForward(3);
       }
     }
@@ -173,10 +173,11 @@ void detectFire(){
       extinguisher.write(70);
       Serial.println("Extinguisher closed.");
       delay(1000);
-      if(digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW)
-        moveForward(2);
+//      if(digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW)
+//        moveForward(2);
     }while(digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW);
     while(true){
+      extinguisher.write(70);
       digitalWrite(FLAME_LED, HIGH);
     }
   }
@@ -213,14 +214,7 @@ void turn(int angle){
 //  }else if(angle < -driftAngle){
 //    angle += driftAngle;
 //  }
-
-
-  if(angle > driftAngle){
-    angle -= driftAngle;
-  }else if(angle < -driftAngle){
-    angle += driftAngle;
-  }
-
+  
   gyroTargetAngle += angle;
   if(gyroTargetAngle >= 360){
     gyroTargetAngle = gyroTargetAngle - 360;
@@ -374,8 +368,8 @@ void setup() {
   stopRobot();  //for the love of god stop
 
   Serial.println("Listening for microphone");
-  FreqCount.begin(200); // Begin measuring sound
-  checkMicrophone();  //robot stays in setup until frequency is heard
+  //FreqCount.begin(200); // Begin measuring sound
+  //checkMicrophone();  //robot stays in setup until frequency is heard
 
   fireDetected = false;
 }
