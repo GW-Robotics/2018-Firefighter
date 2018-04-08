@@ -72,7 +72,7 @@ float angleThreshold = 20;
 float driftAngle = 30;
 
 unsigned long freqCount;
-double closeToWall = 7;   //defines how close the robot should be (inches) to the wall to register as being "too close"
+double closeToWall = 6;   //defines how close the robot should be (inches) to the wall to register as being "too close"
 
 long getFreqCount() {
   return freqCount;
