@@ -62,7 +62,7 @@ float t_acceleration = 0;
 
 float getRotation();
 void setup_gyro();
-int squareTurnDelay = 120;
+int squareTurnDelay = 180;
 
 //Gyroscope controls
 float gyroStartAngle;
@@ -97,7 +97,7 @@ void moveForward(float distance){
 }
 
 void moveSlightLeft() {
-  leftMotor.set(leftSpeed/2);
+  leftMotor.set(leftSpeed/3);
   //rightMotor.set(rightSpeed*.75);
   delay(50);
   stopRobot();
