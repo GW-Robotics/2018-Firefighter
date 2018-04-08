@@ -1,4 +1,5 @@
 #include <Servo.h>
+
 #include <Motor.h>
 
 #include <Ultrasonic.h>
@@ -156,14 +157,14 @@ void detectFire(){
     if(!leftOn || !rightOn){
       Serial.println("Rotating towards fire....");
       if(leftOn){
-        rightTurn(500);
+        rightTurn(250);
         moveForward(3);
       }else if(rightOn){
-        leftTurn(500);
+        leftTurn(250);
         moveForward(3);
       }
     }
-    while(digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW){
+    do{
       Serial.println("Extinguishing!");
       extinguisher.write(0);
       Serial.println("Extinguisher running");
@@ -173,7 +174,7 @@ void detectFire(){
       delay(1000);
       if(digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW)
         moveForward(2);
-    }
+    }while(digitalRead(IR_PIN_LEFT)==LOW || digitalRead(IR_PIN_RIGHT)==LOW);
     while(true){
       digitalWrite(FLAME_LED, HIGH);
     }
@@ -234,18 +235,6 @@ void turn(int angle){
   }
 
   stopRobot();
-}
-
-void extinguishFire(){
-  detachInterrupt(IR_PIN_LEFT);
-  detachInterrupt(IR_PIN_RIGHT);
-  pinMode(IR_PIN_LEFT, INPUT);
-  pinMode(IR_PIN_RIGHT, INPUT);
-
-  digitalWrite(FLAME_LED, HIGH);
-  Serial.println("FIRE");
-
-  interrupts();
 }
 
 void checkMicrophone() {
@@ -358,6 +347,10 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
 
+  Serial.println("Setting up extinguisher");
+  extinguisher.attach(EXTINGUISHER_PIN);
+  extinguisher.write(70);
+
   Serial.println("Setting up IR pins and interrupts");
   pinMode(IR_PIN_LEFT, INPUT);
   pinMode(IR_PIN_RIGHT, INPUT);
@@ -376,17 +369,13 @@ void setup() {
   FreqCount.begin(200); // Begin measuring sound
   checkMicrophone();  //robot stays in setup until frequency is heard
 
-  Serial.println("Setting up extinguisher");
-  extinguisher.attach(EXTINGUISHER_PIN);
-  extinguisher.write(70);
   fireDetected = false;
-
-  right90();
 }
 
 void loop() {
-  startUp();
+  //startUp();
   // levelOneNav();
   // getRotation();
+  stopRobot();
   delay(100);
 }
