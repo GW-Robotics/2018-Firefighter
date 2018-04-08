@@ -44,7 +44,7 @@ Servo extinguisher;
 
 //Motor top speeds
 double rightSpeed = 0.4;
-double leftSpeed = 0.4;
+double leftSpeed = 0.3;
 
 //dog flags
 bool dog1 = false;
@@ -61,7 +61,7 @@ float t_acceleration = 0;
 
 float getRotation();
 void setup_gyro();
-int squareTurnDelay = 400;
+int squareTurnDelay = 350;
 
 //Gyroscope controls
 float gyroStartAngle;
@@ -98,14 +98,14 @@ void moveForward(float distance){
 void moveSlightLeft() {
   leftMotor.set(leftSpeed/2);
   rightMotor.set(rightSpeed*.75);
-  delay(100);
+  delay(50);
   stopRobot();
 }
 
 void moveSlightRight() {
   leftMotor.set(leftSpeed*.75); //Half power plus additional 25
   rightMotor.set(rightSpeed/2);
-  delay(100);
+  delay(50);
   stopRobot();
 }
 
@@ -390,11 +390,10 @@ void setup() {
   fireDetected = false;
 
   right90();
-  left90();
 }
 
 void loop() {
-
+  //foreverLeftFollow();
   // startUp();
   // levelOneNav();
   // getRotation();
