@@ -85,12 +85,12 @@ void foreverLeftFollow(){
   while (true) {
     while(frontRightUltrasonic.getDistance() > closeToWall){
       rollForward();
-      delay(500);
+      delay(100);
       stopRobot();
       if(leftUltrasonic.getDistance() > (closeToWall/2)){
         moveSlightLeft();
       }
-      delay(500);
+      delay(100);
     }
     right90();
   }

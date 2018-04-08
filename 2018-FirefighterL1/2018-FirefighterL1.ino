@@ -98,14 +98,14 @@ void moveForward(float distance){
 
 void moveSlightLeft() {
   leftMotor.set(leftSpeed/2);
-  rightMotor.set(rightSpeed*.75);
+  //rightMotor.set(rightSpeed*.75);
   delay(50);
   stopRobot();
 }
 
 void moveSlightRight() {
   leftMotor.set(leftSpeed*.75); //Half power plus additional 25
-  rightMotor.set(rightSpeed/2);
+  //rightMotor.set(rightSpeed/2);
   delay(50);
   stopRobot();
 }
