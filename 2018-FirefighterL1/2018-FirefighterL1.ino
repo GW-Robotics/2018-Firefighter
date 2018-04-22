@@ -247,7 +247,6 @@ float calcAvg(float x,float y){
   return avg;
 }
 
-
 void startUp(){
   //ping ultrasonics twice and average the values to get (hopefully) accurate values
   float right=calcAvg(rightUltrasonic.getDistance(),rightUltrasonic.getDistance());
